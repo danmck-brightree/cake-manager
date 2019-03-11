@@ -17,6 +17,10 @@ namespace CakeManager.Client.Components.Layout
 
         protected TokenGuardComponent TokenGuard { get; set; }
 
+        protected bool CollapseNavMenu { get; set; } = true;
+
+        protected string NavMenuCssClass => CollapseNavMenu ? "collapse" : null;
+
         protected override async Task OnInitAsync()
         {
             TokenService.onTokenChange += StateHasChanged;
@@ -27,6 +31,11 @@ namespace CakeManager.Client.Components.Layout
         {
             await TokenService.LogOut();
             await TokenGuard.CheckToken();
+        }
+
+        protected void ToggleNavMenu()
+        {
+            CollapseNavMenu = !CollapseNavMenu;
         }
     }
 }
