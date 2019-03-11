@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/CakeManager.Client/obj
+/CakeManager.Client/bin
+/CakeManager.Server/bin
+/CakeManager.Server/obj
+/CakeManager.Shared/bin
+/CakeManager.Shared/obj

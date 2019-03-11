@@ -1,0 +1,25 @@
+﻿@page "/login"
+@inherits LoginComponent
+@layout Layout.Layout
+
+<div id="Login">
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <span class="alert-danger">@ErrorMessage</span>
+    }
+
+    <EditForm OnValidSubmit="@Login" Model="@User">
+
+        <DataAnnotationsValidator />
+        <span class="alert-warning"><ValidationSummary /></span>
+
+        <span>Username</span><input type="text" bind="@User.Username"/>
+        <span class="alert-warning"><ValidationMessage For="@(() => User.Username)"/></span>
+        <span>Password</span><input type="password" bind="@User.Password"/>
+        <span class="alert-warning"><ValidationMessage For="@(() => User.Password)"/></span>
+        <button type="submit">Go</button>
+
+    </EditForm>
+
+</div>

@@ -1,0 +1,20 @@
+﻿@inherits LayoutComponent
+
+<TokenGuard ref="TokenGuard"/>
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        @if (TokenService.IsLoggedIn)
+        {
+            <a href="" onclick="@LogOut" class="ml-md-auto nav-link">Log Out</a>
+        }
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
