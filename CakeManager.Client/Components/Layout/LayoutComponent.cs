@@ -1,5 +1,5 @@
 ﻿using CakeManager.Client.Components.TokenGuard;
-using CakeManager.Client.Services;
+using CakeManager.Client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Layouts;
 using System.Threading.Tasks;
@@ -8,12 +8,7 @@ namespace CakeManager.Client.Components.Layout
 {
     public class LayoutComponent : LayoutComponentBase
     {
-        #region dependency injection
-
-        [Inject]
-        protected ITokenService TokenService { get; set; }
-
-        #endregion
+        [Inject] protected ITokenService TokenService { get; set; }
 
         protected TokenGuardComponent TokenGuard { get; set; }
 

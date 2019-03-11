@@ -1,5 +1,6 @@
 ﻿using CakeManager.Shared;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CakeManager.Server.Controllers
 {
@@ -7,12 +8,15 @@ namespace CakeManager.Server.Controllers
     public class AccountController : Controller
     {
         [HttpPost("[action]")]
-        public TokenResponse Login(User user)
+        public TokenResponse Login([FromBody]User user)
         {
+            var token = Guid.NewGuid().ToString();
+            var success = true;
+
             return new TokenResponse
             {
-                Success = true,
-                Token = "abc123"
+                Success = success,
+                Token = token
             };
         }
     }

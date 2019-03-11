@@ -1,0 +1,16 @@
+﻿@page "/cakemark"
+@inherits CakeMarkComponent
+@layout Layout.Layout
+
+<TokenGuard/>
+
+<div class="cakeMarkStyle">
+
+    <Error ref="Error"/>
+
+    <button onclick="@AddCakeMark">Add cake mark!</button>
+    <button onclick="@RemoveCakeMark">Remove cake mark!</button>
+
+    <CakeMarkTally ref="CakeMarkTally"/>
+
+</div>

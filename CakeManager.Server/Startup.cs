@@ -1,23 +1,44 @@
+using AutoMapper;
+using CakeManager.Logic;
+using CakeManager.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
-using System.Linq;
 
 namespace CakeManager.Server
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public IConfiguration Configuration { get; }
+
+        public Startup(IWebHostEnvironment env)
         {
-            services.AddMvc().AddNewtonsoftJson();
-            services.AddResponseCompression();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddMvc().AddNewtonsoftJson();
+            services.AddResponseCompression();
+            services.AddDbContext<CakeMarkDbContext>(options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("CakeManager.Server")));
+
+            Mapper.Initialize(x => x.AddProfile<AutoMapperProfile>());
+
+            services.AddScoped<ICakeMarkDbContext, CakeMarkDbContext>();
+            services.AddScoped<ICakeMarkLogic, CakeMarkLogic>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();

@@ -2,12 +2,9 @@
 @inherits LoginComponent
 @layout Layout.Layout
 
-<div id="Login">
+<div class="cakeMarkStyle">
 
-    @if (!string.IsNullOrEmpty(ErrorMessage))
-    {
-        <span class="alert-danger">@ErrorMessage</span>
-    }
+    <Error ref="Error"/>
 
     <EditForm OnValidSubmit="@Login" Model="@User">
 

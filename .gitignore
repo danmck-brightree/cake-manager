@@ -9,3 +9,7 @@
 /CakeManager.Shared/bin
 /CakeManager.Shared/obj
 /.vs/*
+/CakeManager.Logic/bin
+/CakeManager.Logic/obj
+/CakeManager.Repository/bin
+/CakeManager.Repository/obj

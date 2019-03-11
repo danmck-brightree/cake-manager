@@ -9,10 +9,16 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.9.0-preview3-19154-02" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Server" Version="3.0.0-preview3-19153-02" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview3-19153-02" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0-preview3.19153.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CakeManager.Client\CakeManager.Client.csproj" />
+    <ProjectReference Include="..\CakeManager.Logic\CakeManager.Logic.csproj" />
     <ProjectReference Include="..\CakeManager.Shared\CakeManager.Shared.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace CakeManager.Client.Services
+namespace CakeManager.Client.Services.Interfaces
 {
     public interface ITokenService
     {

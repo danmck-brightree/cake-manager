@@ -1,0 +1,12 @@
+﻿@inherits CakeMarkTallyComponent
+
+<label class="alert-info">
+    @if (CakeMarkTally.HasValue)
+    {
+        <text>You have @CakeMarkTally.Value cake marks.</text>
+    }
+    else
+    {
+        <text>Loading...</text>
+    }
+</label>
