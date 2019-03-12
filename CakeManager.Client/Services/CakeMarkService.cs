@@ -19,10 +19,18 @@ namespace CakeManager.Client.Services
 
         private const string CakeMarkUrl = "/api/CakeMark/CakeMark";
         private const string CakeMarksUrl = "/api/CakeMark/CakeMarks";
+        private const string SuperCakeMarkUrl = "/api/CakeMark/SuperCakeMark";
 
         public async Task<int> GetCakeMarkTally()
         {
             var result = await HttpClient.GetJsonAsync<int>(CakeMarkUrl);
+
+            return result;
+        }
+
+        public async Task<int> GetSuperCakeMarkTally()
+        {
+            var result = await HttpClient.GetJsonAsync<int>(SuperCakeMarkUrl);
 
             return result;
         }
@@ -37,6 +45,13 @@ namespace CakeManager.Client.Services
         public async Task<bool> RemoveCakeMark(CakeMark cakeMark)
         {
             var result = await HttpClient.DeleteAsync(CakeMarkUrl + "?userId=" + cakeMark.UserId);
+
+            return result.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RemoveSuperCakeMark(SuperCakeMark cakeMark)
+        {
+            var result = await HttpClient.DeleteAsync(SuperCakeMarkUrl + "?userId=" + cakeMark.UserId);
 
             return result.IsSuccessStatusCode;
         }

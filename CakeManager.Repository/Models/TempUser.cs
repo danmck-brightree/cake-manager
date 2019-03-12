@@ -26,5 +26,6 @@ namespace CakeManager.Repository.Models
         public virtual Office Office { get; set; }
 
         public virtual List<CakeMark> CakeMarks { get; set; }
+        public virtual List<SuperCakeMark> SuperCakeMarks { get; set; }
     }
 }

@@ -24,6 +24,12 @@ namespace CakeManager.Server.Controllers
             return await this.cakeMarkLogic.GetCakeMarkTally();
         }
 
+        [HttpGet("supercakemark")]
+        public async Task<int> GetSuperCakeMarkTally()
+        {
+            return await this.cakeMarkLogic.GetSuperCakeMarkTally();
+        }
+
         [HttpPost("cakemark")]
         public async Task<bool> AddCakeMark([FromBody]CakeMark cakeMark)
         {
@@ -34,6 +40,17 @@ namespace CakeManager.Server.Controllers
         public async Task<IActionResult> RemoveCakeMark(Guid userId)
         {
             var success = await this.cakeMarkLogic.RemoveCakeMark(userId);
+
+            if (success)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
+        [HttpDelete("supercakemark")]
+        public async Task<IActionResult> RemoveSuperCakeMark(Guid userId)
+        {
+            var success = await this.cakeMarkLogic.RemoveSuperCakeMark(userId);
 
             if (success)
                 return Ok();

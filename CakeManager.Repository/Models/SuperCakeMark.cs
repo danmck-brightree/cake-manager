@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CakeManager.Repository.Models
 {
-    public class TempUserToken
+    public class SuperCakeMark
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [Required]
         public Guid UserId { get; set; }
 
-        [Required]
-        public string Token { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        public Guid CreatedBy { get; set; }
 
         public virtual TempUser User { get; set; }
     }

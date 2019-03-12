@@ -8,6 +8,8 @@ namespace CakeManager.Client.Extensions
     {
         public const string TokenKey = "Token";
 
+        #region local storage
+
         public static async Task<string> GetItem(this IJSRuntime jsRuntime, string key)
         {
             string item = null;
@@ -47,5 +49,35 @@ namespace CakeManager.Client.Extensions
                 Console.WriteLine(e);
             }
         }
+
+        #endregion
+
+        #region bootstrap modal
+
+        public static async Task ShowModal(this IJSRuntime jsRuntime, string id)
+        {
+            try
+            {
+                await jsRuntime.InvokeAsync<bool>("showModal", new { id });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public static async Task HideModal(this IJSRuntime jsRuntime, string id)
+        {
+            try
+            {
+                await jsRuntime.InvokeAsync<bool>("hideModal", new { id });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        #endregion
     }
 }

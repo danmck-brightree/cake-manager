@@ -1,6 +1,8 @@
 ﻿@inherits ErrorComponent
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <span class="alert-danger">@ErrorMessage</span>
-}
+<div>
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <span class="alert-danger">@ErrorMessage</span>
+    }
+</div>

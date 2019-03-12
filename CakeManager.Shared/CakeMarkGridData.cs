@@ -6,5 +6,6 @@ namespace CakeManager.Shared
     {
         public string Name { get; set; }
         public int CakeMarks { get; set; }
+        public int SuperCakeMarks { get; set; }
     }
 }

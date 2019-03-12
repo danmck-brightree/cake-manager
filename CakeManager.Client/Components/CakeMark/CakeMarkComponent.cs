@@ -2,9 +2,11 @@
 using CakeManager.Client.Components.CakeMarkBoard;
 using CakeManager.Client.Components.CakeMarkTally;
 using CakeManager.Client.Components.Error;
+using CakeManager.Client.Extensions;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace CakeManager.Client.Components.CakeMark
 {
@@ -12,15 +14,19 @@ namespace CakeManager.Client.Components.CakeMark
     {
         [Inject] protected ICakeMarkService CakeMarkService { get; set; }
         [Inject] protected ITokenService TokenService { get; set; }
+        [Inject] protected IJSRuntime JSRuntime { get; set; }
 
         protected ErrorComponent Error { get; set; }
         protected CakeMarkTallyComponent CakeMarkTally { get; set; }
+        protected CakeMarkTallyComponent SuperCakeMarkTally { get; set; }
         protected CakeMarkBoardComponent CakeMarkBoard { get; set; }
 
         private const string AddCakeMarkFailedMessage = "Add cake mark failed.";
         private const string RemoveCakeMarkFailedMessage = "Remove cake mark failed.";
 
         protected Shared.CakeMark CakeMark { get; set; } = new Shared.CakeMark();
+
+        protected Shared.SuperCakeMark SuperCakeMark { get; set; } = new Shared.SuperCakeMark();
 
         protected override async Task OnInitAsync()
         {
@@ -29,14 +35,36 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected async Task AddCakeMark()
         {
+            if ((CakeMarkTally.CakeMarkTally + 1) == Constants.CakeMarkTallyMax)
+            {
+                await JSRuntime.ShowModal("addCakeMarkModal");
+                return;
+            }
+
+            await this.AddConfirmedCakeMark();
+        }
+
+        protected async Task AddConfirmedCakeMark()
+        {
             CakeMark.UserId = Constants.TemporaryUserId;
 
             var result = await this.CakeMarkService.AddCakeMark(CakeMark);
 
+            await JSRuntime.HideModal("addCakeMarkModal");
+
             if (!result)
                 Error.ErrorMessage = AddCakeMarkFailedMessage;
             else
-                CakeMarkTally.CakeMarkTally++;
+            {
+                if ((CakeMarkTally.CakeMarkTally + 1) < Constants.CakeMarkTallyMax)
+                    CakeMarkTally.CakeMarkTally++;
+                else
+                {
+                    CakeMarkTally.CakeMarkTally = 0;
+                    if (SuperCakeMarkTally.CakeMarkTally < Constants.SuperCakeMarkTallyMax)
+                        SuperCakeMarkTally.CakeMarkTally++;
+                }
+            }
 
             await CakeMarkBoard.Refresh();
         }
@@ -54,6 +82,23 @@ namespace CakeManager.Client.Components.CakeMark
                 Error.ErrorMessage = RemoveCakeMarkFailedMessage;
             else
                 CakeMarkTally.CakeMarkTally--;
+
+            await CakeMarkBoard.Refresh();
+        }
+
+        protected async Task RemoveSuperCakeMark()
+        {
+            if (SuperCakeMarkTally.CakeMarkTally == 0)
+                return;
+
+            SuperCakeMark.UserId = Constants.TemporaryUserId;
+
+            var result = await this.CakeMarkService.RemoveSuperCakeMark(SuperCakeMark);
+
+            if (!result)
+                Error.ErrorMessage = RemoveCakeMarkFailedMessage;
+            else
+                SuperCakeMarkTally.CakeMarkTally--;
 
             await CakeMarkBoard.Refresh();
         }

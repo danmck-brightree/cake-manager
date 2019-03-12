@@ -1,18 +1,43 @@
 ﻿@page "/cakemark"
 @inherits CakeMarkComponent
 @layout Layout.Layout
+@using static CakeManager.Shared.Constants;
 
 <TokenGuard/>
 
-<div>
+<div style="margin-bottom: 10px">
 
     <Error ref="Error"/>
+
+    <CakeMarkTally ref="CakeMarkTally"/>
 
     <button class="btn btn-danger" onclick="@AddCakeMark">Add cake mark!</button>
     <button class="btn btn-success" onclick="@RemoveCakeMark">Remove cake mark!</button>
 
+    <CakeMarkTally ref="SuperCakeMarkTally" CakeMarkType="@CakeMarkType.Super"/>
+
+    <button class="btn btn-warning" onclick="@RemoveSuperCakeMark">I brought cake!</button>
+
 </div>
 
-<CakeMarkTally ref="CakeMarkTally"/>
-
 <CakeMarkBoard ref="CakeMarkBoard"/>
+
+<div class="modal fade" id="addCakeMarkModal" tabindex="-1" role="dialog" aria-labelledby="addCakeMarkModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCakeMarkModalLabel">Warning</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          You are about to wipe the cake board and commit to buying a cake. Are you sure you want to continue?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="@AddConfirmedCakeMark">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>

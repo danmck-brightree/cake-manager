@@ -15,7 +15,7 @@ namespace CakeManager.Repository
         public DbSet<Models.CakeMark> CakeMark { get; set; }
         public DbSet<Models.Office> Office { get; set; }
         public DbSet<TempUser> TempUser { get; set; }
-        public DbSet<TempUserToken> TempUserToken { get; set; }
+        public DbSet<Models.SuperCakeMark> SuperCakeMark { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -63,14 +63,6 @@ namespace CakeManager.Repository
                     Email = "tperson@brightree.com",
                     OfficeId = glasgowOffice.Id,
                     Password = "temp"
-                });
-
-            builder.Entity<TempUserToken>().HasData(
-                new TempUserToken
-                {
-                    Id = Guid.NewGuid(),
-                    Token = Guid.NewGuid().ToString(),
-                    UserId = me.Id
                 });
         }
 

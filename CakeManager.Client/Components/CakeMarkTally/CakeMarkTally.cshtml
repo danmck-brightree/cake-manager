@@ -1,14 +1,7 @@
 ﻿@inherits CakeMarkTallyComponent
 
 <div style="margin-top: 10px; margin-bottom: 10px;">
-    <label class="form-control alert-success">
-        @if (CakeMarkTally.HasValue)
-        {
-            <text>You have @CakeMarkTally.Value cake marks.</text>
-        }
-        else
-        {
-            <text>Loading...</text>
-        }
+    <label class="form-control @CakeMarkClass">
+        @CakeMarkDisplay
     </label>
 </div>

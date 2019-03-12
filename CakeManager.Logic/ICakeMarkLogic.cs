@@ -8,8 +8,10 @@ namespace CakeManager.Logic
     public interface ICakeMarkLogic
     {
         Task<int> GetCakeMarkTally();
+        Task<int> GetSuperCakeMarkTally();
         Task<bool> AddCakeMark(CakeMark cakeMark);
         Task<bool> RemoveCakeMark(Guid userId);
+        Task<bool> RemoveSuperCakeMark(Guid userId);
         Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid officeId);
     }
 }

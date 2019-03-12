@@ -9,7 +9,7 @@ namespace CakeManager.Repository
         DbSet<CakeMark> CakeMark { get; set; }
         DbSet<Office> Office { get; set; }
         DbSet<TempUser> TempUser { get; set; }
-        DbSet<TempUserToken> TempUserToken { get; set; }
+        DbSet<SuperCakeMark> SuperCakeMark { get; set; }
         Task<int> SaveChangesAsync();
     }
 }
