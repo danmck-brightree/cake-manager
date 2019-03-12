@@ -4,13 +4,15 @@
 
 <TokenGuard/>
 
-<div class="cakeMarkStyle">
+<div>
 
     <Error ref="Error"/>
 
-    <button onclick="@AddCakeMark">Add cake mark!</button>
-    <button onclick="@RemoveCakeMark">Remove cake mark!</button>
-
-    <CakeMarkTally ref="CakeMarkTally"/>
+    <button class="btn btn-danger" onclick="@AddCakeMark">Add cake mark!</button>
+    <button class="btn btn-success" onclick="@RemoveCakeMark">Remove cake mark!</button>
 
 </div>
+
+<CakeMarkTally ref="CakeMarkTally"/>
+
+<CakeMarkBoard ref="CakeMarkBoard"/>

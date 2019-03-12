@@ -3,6 +3,7 @@ using CakeManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace CakeManager.Logic
         public CakeMarkLogic(ICakeMarkDbContext cakeMarkDbContext, IHttpContextAccessor httpContext)
         {
             this.cakeMarkDbContext = cakeMarkDbContext;
-            this.currentUserId = User.TemporaryUserId;
+            this.currentUserId = Constants.TemporaryUserId;
         }
 
         public async Task<int> GetCakeMarkTally()
@@ -76,6 +77,25 @@ namespace CakeManager.Logic
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid officeId)
+        {
+            try
+            {
+                return await this.cakeMarkDbContext.TempUser
+                    .Where(x => x.OfficeId == officeId)
+                    .Select(x => new CakeMarkGridData
+                    {
+                        Name = x.Name,
+                        CakeMarks = x.CakeMarks.Count()
+                    })
+                    .ToListAsync();
+            }
+            catch
+            {
+                return new List<CakeMarkGridData>();
             }
         }
     }

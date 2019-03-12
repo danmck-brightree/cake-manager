@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CakeManager.Shared;
+using System.Linq;
 
 namespace CakeManager.Server
 {
@@ -9,6 +10,9 @@ namespace CakeManager.Server
         {
             CreateMap<CakeMark, Repository.Models.CakeMark>();
             CreateMap<Repository.Models.CakeMark, CakeMark>();
+
+            CreateMap<Office, Repository.Models.Office>();
+            CreateMap<Repository.Models.Office, Office>();
         }
     }
 }

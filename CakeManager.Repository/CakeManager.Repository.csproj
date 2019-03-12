@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview3.19153.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CakeManager.Shared\CakeManager.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

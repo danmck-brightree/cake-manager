@@ -36,6 +36,7 @@ namespace CakeManager.Server
 
             services.AddScoped<ICakeMarkDbContext, CakeMarkDbContext>();
             services.AddScoped<ICakeMarkLogic, CakeMarkLogic>();
+            services.AddScoped<IOfficeLogic, OfficeLogic>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 

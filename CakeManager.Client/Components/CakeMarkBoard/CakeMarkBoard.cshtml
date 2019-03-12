@@ -1,0 +1,31 @@
+﻿@inherits CakeMarkBoardComponent
+
+<div class="form-group" style="width: 200px">
+    <select class="form-control" onchange="@ChangeOffice" value="@SelectedOfficeId">
+        @foreach (var office in Offices)
+        {
+            <option value="@office.Id">@office.Name</option>
+        }
+    </select>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Cake Marks</th>
+            </tr>
+        </thead>
+
+        @foreach (var cakeMarkGridData in CakeMarkGridData)
+        {
+            <tr>
+                <td>@cakeMarkGridData.Name</td>
+                <td>@cakeMarkGridData.CakeMarks</td>
+            </tr>
+        }
+
+    </table>
+</div>

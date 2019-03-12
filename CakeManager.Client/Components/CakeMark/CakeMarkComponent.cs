@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CakeManager.Client.Components.CakeMarkBoard;
 using CakeManager.Client.Components.CakeMarkTally;
 using CakeManager.Client.Components.Error;
 using CakeManager.Client.Services.Interfaces;
@@ -14,6 +15,7 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected ErrorComponent Error { get; set; }
         protected CakeMarkTallyComponent CakeMarkTally { get; set; }
+        protected CakeMarkBoardComponent CakeMarkBoard { get; set; }
 
         private const string AddCakeMarkFailedMessage = "Add cake mark failed.";
         private const string RemoveCakeMarkFailedMessage = "Remove cake mark failed.";
@@ -27,7 +29,7 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected async Task AddCakeMark()
         {
-            CakeMark.UserId = User.TemporaryUserId;
+            CakeMark.UserId = Constants.TemporaryUserId;
 
             var result = await this.CakeMarkService.AddCakeMark(CakeMark);
 
@@ -35,6 +37,8 @@ namespace CakeManager.Client.Components.CakeMark
                 Error.ErrorMessage = AddCakeMarkFailedMessage;
             else
                 CakeMarkTally.CakeMarkTally++;
+
+            await CakeMarkBoard.Refresh();
         }
 
         protected async Task RemoveCakeMark()
@@ -42,7 +46,7 @@ namespace CakeManager.Client.Components.CakeMark
             if (CakeMarkTally.CakeMarkTally == 0)
                 return;
 
-            CakeMark.UserId = User.TemporaryUserId;
+            CakeMark.UserId = Constants.TemporaryUserId;
 
             var result = await this.CakeMarkService.RemoveCakeMark(CakeMark);
 
@@ -50,6 +54,8 @@ namespace CakeManager.Client.Components.CakeMark
                 Error.ErrorMessage = RemoveCakeMarkFailedMessage;
             else
                 CakeMarkTally.CakeMarkTally--;
+
+            await CakeMarkBoard.Refresh();
         }
     }
 }

@@ -11,12 +11,9 @@ namespace CakeManager.Client.Services
 {
     public class TokenService : ITokenService
     {
-        #region dependency injection
-
         private IJSRuntime JsRuntimeCurrent { get; set; }
         private HttpClient HttpClient { get; set; }
 
-        #endregion
 
         public event Action onTokenChange;
 

@@ -2,6 +2,7 @@
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -9,11 +10,7 @@ namespace CakeManager.Client.Services
 {
     public class CakeMarkService : ICakeMarkService
     {
-        #region dependency injection
-
         private HttpClient HttpClient { get; set; }
-
-        #endregion
 
         public CakeMarkService(HttpClient httpClient)
         {
@@ -21,6 +18,7 @@ namespace CakeManager.Client.Services
         }
 
         private const string CakeMarkUrl = "/api/CakeMark/CakeMark";
+        private const string CakeMarksUrl = "/api/CakeMark/CakeMarks";
 
         public async Task<int> GetCakeMarkTally()
         {
@@ -41,6 +39,13 @@ namespace CakeManager.Client.Services
             var result = await HttpClient.DeleteAsync(CakeMarkUrl + "?userId=" + cakeMark.UserId);
 
             return result.IsSuccessStatusCode;
+        }
+
+        public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid selectedOfficeId)
+        {
+            var result = await HttpClient.GetJsonAsync<List<CakeMarkGridData>>(CakeMarksUrl + string.Format("?officeId={0}", selectedOfficeId));
+
+            return result;
         }
     }
 }

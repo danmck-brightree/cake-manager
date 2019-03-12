@@ -6,6 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190312083631_User.cs" />
+    <Compile Remove="Migrations\20190312083631_User.Designer.cs" />
+    <Compile Remove="Migrations\20190312084005_TempUser.cs" />
+    <Compile Remove="Migrations\20190312084005_TempUser.Designer.cs" />
+    <Compile Remove="Migrations\20190312085759_TempUser.cs" />
+    <Compile Remove="Migrations\20190312085759_TempUser.Designer.cs" />
+    <Compile Remove="Migrations\20190312090726_TempUser.cs" />
+    <Compile Remove="Migrations\20190312090726_TempUser.Designer.cs" />
+    <Compile Remove="Migrations\20190312094815_TempUser.cs" />
+    <Compile Remove="Migrations\20190312094815_TempUser.Designer.cs" />
+    <Compile Remove="Migrations\20190312100108_TempUser.cs" />
+    <Compile Remove="Migrations\20190312100108_TempUser.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.9.0-preview3-19154-02" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Server" Version="3.0.0-preview3-19153-02" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview3-19153-02" />

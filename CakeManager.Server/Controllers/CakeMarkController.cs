@@ -2,6 +2,7 @@
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -38,6 +39,12 @@ namespace CakeManager.Server.Controllers
                 return Ok();
             else
                 return BadRequest();
+        }
+
+        [HttpGet("cakemarks")]
+        public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid officeId)
+        {
+            return await this.cakeMarkLogic.GetCakeMarkGridData(officeId);
         }
     }
 }
