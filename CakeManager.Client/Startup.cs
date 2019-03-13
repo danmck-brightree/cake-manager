@@ -1,3 +1,4 @@
+using CakeManager.Client.Extensions;
 using CakeManager.Client.Services;
 using CakeManager.Client.Services.Interfaces;
 using Microsoft.AspNetCore.Components.Builder;
@@ -12,6 +13,7 @@ namespace CakeManager.Client
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<ICakeMarkService, CakeMarkService>();
             services.AddSingleton<IOfficeService, OfficeService>();
+            services.AddScoped<ITokenHttpClient, TokenHttpClient>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

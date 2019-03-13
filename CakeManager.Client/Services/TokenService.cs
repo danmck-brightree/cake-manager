@@ -1,66 +1,40 @@
 ﻿using CakeManager.Client.Extensions;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CakeManager.Client.Services
 {
     public class TokenService : ITokenService
     {
+        public bool IsLoggedIn { get; set; }
+
         private IJSRuntime JsRuntimeCurrent { get; set; }
-        private HttpClient HttpClient { get; set; }
 
-
-        public event Action onTokenChange;
-
-        public bool IsLoggedIn { get; private set; }
-
-        public TokenService(IJSRuntime jsRuntimeCurrent, HttpClient httpClient)
+        public TokenService(IJSRuntime jsRuntimeCurrent)
         {
             this.JsRuntimeCurrent = jsRuntimeCurrent;
-            this.HttpClient = httpClient;
         }
 
-        private const string LoginUrl = "/api/Account/Login";
-
-        public async Task<bool> CheckToken()
+        public async Task LogIn()
         {
-            var token = await JsRuntimeCurrent.GetItem(JSRuntimeExtensions.TokenKey);
-
-            this.IsLoggedIn = !string.IsNullOrEmpty(token);
-
-            onTokenChange?.Invoke();
-
-            return this.IsLoggedIn;
-        }
-
-        public async Task<TokenResponse> LogIn(User user)
-        {
-            var result = await HttpClient.PostJsonAsync<TokenResponse>(LoginUrl, user);
-
-            if (result.Success)
-            {
-                await JsRuntimeCurrent.SetItem(JSRuntimeExtensions.TokenKey, result.Token);
-                this.IsLoggedIn = true;
-                onTokenChange?.Invoke();
-            }
-            else
-                await LogOut();
-
-            return result;
+            await JsRuntimeCurrent.LogIn();
         }
 
         public async Task LogOut()
         {
-            await JsRuntimeCurrent.RemoveItem(JSRuntimeExtensions.TokenKey);
+            await JsRuntimeCurrent.LogOut();
+        }
 
-            this.IsLoggedIn = false;
+        public async Task<User> GetUser()
+        {
+            return await JsRuntimeCurrent.GetUser();
+        }
 
-            onTokenChange?.Invoke();
+        public async Task<string> GetToken()
+        {
+            return await JsRuntimeCurrent.GetToken();
         }
     }
 }

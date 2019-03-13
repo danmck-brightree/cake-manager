@@ -28,11 +28,6 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected Shared.SuperCakeMark SuperCakeMark { get; set; } = new Shared.SuperCakeMark();
 
-        protected override async Task OnInitAsync()
-        {
-            await base.OnInitAsync();
-        }
-
         protected async Task AddCakeMark()
         {
             if ((CakeMarkTally.CakeMarkTally + 1) == Constants.CakeMarkTallyMax)

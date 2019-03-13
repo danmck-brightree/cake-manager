@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
@@ -14,19 +13,12 @@ namespace CakeManager.Client.Components.TokenGuard
 
         protected override async Task OnInitAsync()
         {
-            var isLoggedIn = await TokenService.CheckToken();
+            var token = await TokenService.GetToken();
 
-            if (!isLoggedIn)
+            if (token == null)
                 UriHelper.NavigateTo(Constants.LoginRoute);
 
             await base.OnInitAsync();
-        }
-
-        public async Task CheckToken()
-        {
-            var checkToken = await TokenService.CheckToken();
-            if (!checkToken)
-                UriHelper.NavigateTo(Constants.LoginRoute);
         }
     }
 }

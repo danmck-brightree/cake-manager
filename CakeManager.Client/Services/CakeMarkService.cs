@@ -1,18 +1,21 @@
-﻿using CakeManager.Client.Services.Interfaces;
+﻿using CakeManager.Client.Extensions;
+using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace CakeManager.Client.Services
 {
     public class CakeMarkService : ICakeMarkService
     {
-        private HttpClient HttpClient { get; set; }
+        private ITokenHttpClient HttpClient { get; set; }
 
-        public CakeMarkService(HttpClient httpClient)
+        public CakeMarkService(ITokenHttpClient httpClient)
         {
             this.HttpClient = httpClient;
         }
@@ -46,14 +49,14 @@ namespace CakeManager.Client.Services
         {
             var result = await HttpClient.DeleteAsync(CakeMarkUrl + "?userId=" + cakeMark.UserId);
 
-            return result.IsSuccessStatusCode;
+            return result;
         }
 
         public async Task<bool> RemoveSuperCakeMark(SuperCakeMark cakeMark)
         {
             var result = await HttpClient.DeleteAsync(SuperCakeMarkUrl + "?userId=" + cakeMark.UserId);
 
-            return result.IsSuccessStatusCode;
+            return result;
         }
 
         public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid selectedOfficeId)

@@ -1,16 +1,19 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
 
 namespace CakeManager.Shared
 {
     public class User
     {
-        public Guid? Id { get; set; }
+        public string UserName { get; set; }
+        public UserProfile Profile { get; set; } = new UserProfile();
+    }
 
-        [Required(ErrorMessage = "Enter a username")]
-        public string Username { get; set; }
+    public class UserProfile
+    {
+        [JsonProperty(PropertyName = "family_name")]
+        public string FamilyName { get; set; }
 
-        [Required(ErrorMessage = "Enter a password")]
-        public string Password { get; set; }
+        [JsonProperty(PropertyName = "given_name")]
+        public string GivenName { get; set; }
     }
 }
