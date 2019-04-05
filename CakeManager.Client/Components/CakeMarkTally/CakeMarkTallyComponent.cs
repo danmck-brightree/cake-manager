@@ -8,6 +8,7 @@ namespace CakeManager.Client.Components.CakeMarkTally
     public class CakeMarkTallyComponent : ComponentBase
     {
         [Inject] protected ICakeMarkService CakeMarkService { get; set; }
+        [Inject] protected ITokenService TokenService { get; set; }
 
         [Parameter] protected CakeMarkType CakeMarkType { get; set; } = CakeMarkType.Normal;
 
@@ -58,6 +59,9 @@ namespace CakeManager.Client.Components.CakeMarkTally
 
         protected override async Task OnInitAsync()
         {
+            if (!TokenService.IsLoggedIn)
+                return;
+
             switch (this.CakeMarkType)
             {
                 case CakeMarkType.Normal:

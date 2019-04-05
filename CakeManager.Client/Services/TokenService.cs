@@ -2,6 +2,7 @@
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.JSInterop;
+using System;
 using System.Threading.Tasks;
 
 namespace CakeManager.Client.Services
@@ -11,6 +12,8 @@ namespace CakeManager.Client.Services
         public bool IsLoggedIn { get; set; }
 
         private IJSRuntime JsRuntimeCurrent { get; set; }
+
+        public event Action onTokenCheck;
 
         public TokenService(IJSRuntime jsRuntimeCurrent)
         {
@@ -34,7 +37,13 @@ namespace CakeManager.Client.Services
 
         public async Task<string> GetToken()
         {
-            return await JsRuntimeCurrent.GetToken();
+            var token = await JsRuntimeCurrent.GetToken();
+
+            this.IsLoggedIn = token != null;
+
+            onTokenCheck?.Invoke();
+
+            return token;
         }
     }
 }

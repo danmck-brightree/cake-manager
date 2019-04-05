@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using CakeManager.Client.Components.TokenGuard;
+using Microsoft.AspNetCore.Components;
 
 namespace CakeManager.Client.Components.Home
 {
-    public class HomeComponent : ComponentBase
+    public class HomeComponent : TokenGuardComponent
     {
     }
 }

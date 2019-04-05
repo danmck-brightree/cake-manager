@@ -2,6 +2,7 @@
 using CakeManager.Client.Components.CakeMarkBoard;
 using CakeManager.Client.Components.CakeMarkTally;
 using CakeManager.Client.Components.Error;
+using CakeManager.Client.Components.TokenGuard;
 using CakeManager.Client.Extensions;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
@@ -10,10 +11,9 @@ using Microsoft.JSInterop;
 
 namespace CakeManager.Client.Components.CakeMark
 {
-    public class CakeMarkComponent : ComponentBase
+    public class CakeMarkComponent : TokenGuardComponent
     {
         [Inject] protected ICakeMarkService CakeMarkService { get; set; }
-        [Inject] protected ITokenService TokenService { get; set; }
         [Inject] protected IJSRuntime JSRuntime { get; set; }
 
         protected ErrorComponent Error { get; set; }

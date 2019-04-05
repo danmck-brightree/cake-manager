@@ -12,6 +12,7 @@ namespace CakeManager.Client.Components.CakeMarkBoard
     {
         [Inject] protected IOfficeService OfficeService { get; set; }
         [Inject] protected ICakeMarkService CakeMarkService { get; set; }
+        [Inject] protected ITokenService TokenService { get; set; }
 
         protected List<Office> Offices { get; set; } = new List<Office>();
         protected List<CakeMarkGridData> CakeMarkGridData { get; set; } = new List<CakeMarkGridData>();
@@ -20,6 +21,9 @@ namespace CakeManager.Client.Components.CakeMarkBoard
 
         protected override async Task OnInitAsync()
         {
+            if (!this.TokenService.IsLoggedIn)
+                return;
+
             this.Offices = await OfficeService.GetOffices();
 
             this.SelectedOfficeId = this.Offices

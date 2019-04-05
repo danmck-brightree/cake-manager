@@ -17,8 +17,9 @@
     }
     
     window.logIn = async () => {
-        var user = authContext.getCachedUser();
-        if (!user) {
+        var token = await window.getToken();
+
+        if (!token) {
             authContext.login();
         }
 

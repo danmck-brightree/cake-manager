@@ -19,27 +19,39 @@ namespace CakeManager.Client.Extensions
 
         public async Task<T> GetJsonAsync<T>(string url)
         {
-            await AddToken();
+            if (!await AddToken())
+                return default(T);
+
             return await HttpClient.GetJsonAsync<T>(url);
         }
 
         public async Task<T> PostJsonAsync<T>(string url, object obj)
         {
-            await AddToken();
+            if (!await AddToken())
+                return default(T);
+
             return await HttpClient.PostJsonAsync<T>(url, obj);
         }
 
         public async Task<bool> DeleteAsync(string url)
         {
-            await AddToken();
+            if (!await AddToken())
+                return false;
+
             var result = await HttpClient.DeleteAsync(url);
             return result.IsSuccessStatusCode;
         }
 
-        private async Task AddToken()
+        private async Task<bool> AddToken()
         {
             var token = await JsRuntimeCurrent.GetToken();
+
+            if (token == null)
+                return false;
+
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            return true;
         }
     }
 }
