@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CakeManager.Client.Components.CakeMarkBoard;
 using CakeManager.Client.Components.CakeMarkTally;
 using CakeManager.Client.Components.Error;
+using CakeManager.Client.Components.Modal;
 using CakeManager.Client.Components.TokenGuard;
 using CakeManager.Client.Extensions;
 using CakeManager.Client.Services.Interfaces;
@@ -15,14 +17,28 @@ namespace CakeManager.Client.Components.CakeMark
     {
         [Inject] protected ICakeMarkService CakeMarkService { get; set; }
         [Inject] protected IJSRuntime JSRuntime { get; set; }
+        [Inject] protected IToastService ToastService { get; set; }
 
         protected ErrorComponent Error { get; set; }
         protected CakeMarkTallyComponent CakeMarkTally { get; set; }
         protected CakeMarkTallyComponent SuperCakeMarkTally { get; set; }
         protected CakeMarkBoardComponent CakeMarkBoard { get; set; }
+        protected ModalComponent Modal { get; set; }
 
         private const string AddCakeMarkFailedMessage = "Add cake mark failed.";
         private const string RemoveCakeMarkFailedMessage = "Remove cake mark failed.";
+        private const string AddCakeMarkSuccessMessage = "Add cake mark success.";
+        private const string RemoveCakeMarkSuccessMessage = "Remove cake mark success.";
+
+        protected override async Task OnAfterRenderAsync()
+        {
+            Action onClickAction = async () => await AddConfirmedCakeMark();
+
+            Modal.onClick -= onClickAction;
+            Modal.onClick += onClickAction;
+
+            await base.OnAfterRenderAsync();
+        }
 
         protected async Task AddCakeMark()
         {
@@ -47,6 +63,8 @@ namespace CakeManager.Client.Components.CakeMark
                 Error.ErrorMessage = AddCakeMarkFailedMessage;
             else
             {
+                await ToastService.ShowToast(AddCakeMarkSuccessMessage);
+
                 if ((CakeMarkTally.CakeMarkTally + 1) < Constants.CakeMarkTallyMax)
                     CakeMarkTally.CakeMarkTally++;
                 else
@@ -72,7 +90,10 @@ namespace CakeManager.Client.Components.CakeMark
             if (!result)
                 Error.ErrorMessage = RemoveCakeMarkFailedMessage;
             else
+            {
+                await ToastService.ShowToast(RemoveCakeMarkSuccessMessage);
                 CakeMarkTally.CakeMarkTally--;
+            }
 
             await CakeMarkBoard.Refresh();
         }

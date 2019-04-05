@@ -20,7 +20,10 @@ namespace CakeManager.Client.Components.CakeMarkBoard
 
         protected override async Task OnAfterRenderAsync()
         {
-            OfficeDropdown.onSelectedOfficeChanged += async (Guid selectedOfficeId) => await ChangeOffice(selectedOfficeId);
+            Action<Guid> onSelectedOfficeChanged = async (Guid selectedOfficeId) => await ChangeOffice(selectedOfficeId);
+
+            OfficeDropdown.onSelectedOfficeChanged -= onSelectedOfficeChanged;
+            OfficeDropdown.onSelectedOfficeChanged += onSelectedOfficeChanged;
 
             await base.OnAfterRenderAsync();
         }

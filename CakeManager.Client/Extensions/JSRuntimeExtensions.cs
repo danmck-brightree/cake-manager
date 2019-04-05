@@ -79,5 +79,21 @@ namespace CakeManager.Client.Extensions
         }
 
         #endregion
+
+        #region bootstrap toast
+
+        public static async Task ShowToast(this IJSRuntime jsRuntime)
+        {
+            try
+            {
+                await jsRuntime.InvokeAsync<bool>("showToast");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        #endregion
     }
 }

@@ -29,11 +29,15 @@ namespace CakeManager.Client.Services
 
         public async Task LogIn()
         {
+            this.IsRegistered = false;
+            onStatusChanged?.Invoke();
             await JsRuntimeCurrent.LogIn();
         }
 
         public async Task LogOut()
         {
+            this.IsRegistered = false;
+            onStatusChanged?.Invoke();
             await JsRuntimeCurrent.LogOut();
         }
 
@@ -47,7 +51,6 @@ namespace CakeManager.Client.Services
             var token = await JsRuntimeCurrent.GetToken();
 
             this.IsLoggedIn = token != null;
-
             onStatusChanged?.Invoke();
 
             return token;
@@ -61,7 +64,6 @@ namespace CakeManager.Client.Services
             var hasLocalUser = await HttpClient.GetJsonAsync<bool>(HasLocalUserUrl);
 
             this.IsRegistered = hasLocalUser;
-
             onStatusChanged?.Invoke();
 
             return hasLocalUser;
