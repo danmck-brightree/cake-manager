@@ -9,15 +9,22 @@ namespace CakeManager.Client.Services
 {
     public class TokenService : ITokenService
     {
+        private const string HasLocalUserUrl = "/api/Account/User";
+
         public bool IsLoggedIn { get; set; }
+
+        public bool IsRegistered { get; set; }
 
         private IJSRuntime JsRuntimeCurrent { get; set; }
 
-        public event Action onTokenCheck;
+        private ITokenHttpClient HttpClient { get; set; }
 
-        public TokenService(IJSRuntime jsRuntimeCurrent)
+        public event Action onStatusChanged;
+
+        public TokenService(IJSRuntime jsRuntimeCurrent, ITokenHttpClient httpClient)
         {
             this.JsRuntimeCurrent = jsRuntimeCurrent;
+            this.HttpClient = httpClient;
         }
 
         public async Task LogIn()
@@ -41,9 +48,23 @@ namespace CakeManager.Client.Services
 
             this.IsLoggedIn = token != null;
 
-            onTokenCheck?.Invoke();
+            onStatusChanged?.Invoke();
 
             return token;
+        }
+
+        public async Task<bool> HasLocalUser()
+        {
+            if (this.IsRegistered)
+                return true;
+
+            var hasLocalUser = await HttpClient.GetJsonAsync<bool>(HasLocalUserUrl);
+
+            this.IsRegistered = hasLocalUser;
+
+            onStatusChanged?.Invoke();
+
+            return hasLocalUser;
         }
     }
 }

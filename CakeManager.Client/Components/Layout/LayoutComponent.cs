@@ -15,7 +15,7 @@ namespace CakeManager.Client.Components.Layout
         
         protected override async Task OnInitAsync()
         {
-            TokenService.onTokenCheck += StateHasChanged;
+            TokenService.onStatusChanged += StateHasChanged;
             var token = await TokenService.GetToken();
 
             await base.OnInitAsync();

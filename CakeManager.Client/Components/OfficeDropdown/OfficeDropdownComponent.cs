@@ -20,6 +20,9 @@ namespace CakeManager.Client.Components.OfficeDropdown
         {
             this.Offices = await OfficeService.GetOffices();
 
+            if (this.Offices == null)
+                return;
+
             this.SelectedOfficeId = this.Offices
                 .Where(x => x.Selected)
                 .Select(x => x.Id)

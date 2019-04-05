@@ -13,11 +13,13 @@ namespace CakeManager.Logic
     public class OfficeLogic : BaseLogic, IOfficeLogic
     {
         private readonly ICakeMarkDbContext cakeMarkDbContext;
+        private readonly IAccountLogic accountLogic;
 
-        public OfficeLogic(ICakeMarkDbContext cakeMarkDbContext, IHttpContextAccessor httpContext)
+        public OfficeLogic(ICakeMarkDbContext cakeMarkDbContext, IHttpContextAccessor httpContext, IAccountLogic accountLogic)
             : base(cakeMarkDbContext, httpContext)
         {
             this.cakeMarkDbContext = cakeMarkDbContext;
+            this.accountLogic = accountLogic;
         }
 
         public async Task<List<Office>> GetOffices()
@@ -63,10 +65,16 @@ namespace CakeManager.Logic
             if (selectedOfficeId == default)
                 return false;
 
+            if (!this.CurrentUserId.HasValue)
+            {
+                if (!await this.accountLogic.RegisterLocalUser())
+                    return false;
+            }
+
             try
             {
-                var user = this.cakeMarkDbContext.ActiveDirectoryUser
-                    .Single(x => x.Id == CurrentUserId.Value);
+                var user = await this.cakeMarkDbContext.ActiveDirectoryUser
+                    .SingleAsync(x => x.Id == CurrentUserId.Value);
 
                 user.OfficeId = selectedOfficeId;
 

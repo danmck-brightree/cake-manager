@@ -1,5 +1,4 @@
 ﻿using CakeManager.Repository;
-using CakeManager.Repository.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
@@ -12,7 +11,15 @@ namespace CakeManager.Logic
         private readonly ICakeMarkDbContext cakeMarkDbContext;
         private readonly IHttpContextAccessor httpContext;
 
-        private static object userCreateLock = new object();
+        protected string CurrentUserEmail
+        {
+            get
+            {
+                return httpContext.HttpContext.User.Claims
+                    .FirstOrDefault(x => x.Type == ClaimTypes.Name)
+                    ?.Value;
+            }
+        }
 
         private Guid? currentUserId = null;
 
@@ -22,36 +29,22 @@ namespace CakeManager.Logic
             {
                 if (this.currentUserId == null)
                 {
-                    lock (userCreateLock)
+                    try
                     {
-                        try
+                        var currentUserEmail = CurrentUserEmail;
+
+                        if (currentUserEmail != null)
                         {
-                            var currentUserEmail = httpContext.HttpContext.User.Claims
-                                .FirstOrDefault(x => x.Type == ClaimTypes.Name)
-                                ?.Value;
+                            var currentUser = this.cakeMarkDbContext.ActiveDirectoryUser
+                                .FirstOrDefault(x => x.Email == currentUserEmail);
 
-                            if (currentUserEmail != null)
-                            {
-                                var currentUser = this.cakeMarkDbContext.ActiveDirectoryUser
-                                    .FirstOrDefault(x => x.Email == currentUserEmail);
-
-                                if (currentUser == null)
-                                {
-                                    currentUser = new ActiveDirectoryUser
-                                    {
-                                        Email = currentUserEmail
-                                    };
-                                    this.cakeMarkDbContext.ActiveDirectoryUser.Add(currentUser);
-                                    this.cakeMarkDbContext.SaveChanges();
-                                }
-
+                            if (currentUser != null)
                                 this.currentUserId = currentUser.Id;
-                            }
                         }
-                        catch
-                        {
-                            this.currentUserId = null;
-                        }
+                    }
+                    catch
+                    {
+                        this.currentUserId = null;
                     }
                 }
 

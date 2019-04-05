@@ -37,6 +37,8 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected async Task AddConfirmedCakeMark()
         {
+            Error.ErrorMessage = null;
+
             var result = await this.CakeMarkService.AddCakeMark();
 
             await JSRuntime.HideModal("addCakeMarkModal");
@@ -60,6 +62,8 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected async Task RemoveCakeMark()
         {
+            Error.ErrorMessage = null;
+
             if (CakeMarkTally.CakeMarkTally == 0)
                 return;
 
@@ -75,6 +79,8 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected async Task RemoveSuperCakeMark()
         {
+            Error.ErrorMessage = null;
+
             if (SuperCakeMarkTally.CakeMarkTally == 0)
                 return;
 

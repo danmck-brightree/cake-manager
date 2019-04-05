@@ -10,7 +10,6 @@ namespace CakeManager.Client.Components.TokenGuard
     {
         [Inject] protected IUriHelper UriHelper { get; set; }
         [Inject] protected ITokenService TokenService { get; set; }
-        [Inject] protected IOfficeService OfficeService { get; set; }
 
         protected override async Task OnInitAsync()
         {
@@ -22,8 +21,8 @@ namespace CakeManager.Client.Components.TokenGuard
                 return;
             }
 
-            var officeId = await OfficeService.GetCurrentUserOfficeId();
-            if (officeId == default)
+            var hasLocalUser = await TokenService.HasLocalUser();
+            if (!hasLocalUser)
             {
                 UriHelper.NavigateTo(Constants.OfficeRoute);
                 return;
