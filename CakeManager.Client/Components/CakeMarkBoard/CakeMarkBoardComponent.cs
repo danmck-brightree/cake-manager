@@ -28,6 +28,8 @@ namespace CakeManager.Client.Components.CakeMarkBoard
         protected async Task ChangeOffice(Guid selectedOfficeId)
         {
             this.CakeMarkGridData = await CakeMarkService.GetCakeMarkGridData(selectedOfficeId);
+
+            StateHasChanged();
         }
 
         public async Task Refresh()
