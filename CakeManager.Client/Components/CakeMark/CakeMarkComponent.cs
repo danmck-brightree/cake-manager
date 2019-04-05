@@ -24,10 +24,6 @@ namespace CakeManager.Client.Components.CakeMark
         private const string AddCakeMarkFailedMessage = "Add cake mark failed.";
         private const string RemoveCakeMarkFailedMessage = "Remove cake mark failed.";
 
-        protected Shared.CakeMark CakeMark { get; set; } = new Shared.CakeMark();
-
-        protected Shared.SuperCakeMark SuperCakeMark { get; set; } = new Shared.SuperCakeMark();
-
         protected async Task AddCakeMark()
         {
             if ((CakeMarkTally.CakeMarkTally + 1) == Constants.CakeMarkTallyMax)
@@ -41,9 +37,7 @@ namespace CakeManager.Client.Components.CakeMark
 
         protected async Task AddConfirmedCakeMark()
         {
-            CakeMark.UserId = Constants.TemporaryUserId;
-
-            var result = await this.CakeMarkService.AddCakeMark(CakeMark);
+            var result = await this.CakeMarkService.AddCakeMark();
 
             await JSRuntime.HideModal("addCakeMarkModal");
 
@@ -69,9 +63,7 @@ namespace CakeManager.Client.Components.CakeMark
             if (CakeMarkTally.CakeMarkTally == 0)
                 return;
 
-            CakeMark.UserId = Constants.TemporaryUserId;
-
-            var result = await this.CakeMarkService.RemoveCakeMark(CakeMark);
+            var result = await this.CakeMarkService.RemoveCakeMark();
 
             if (!result)
                 Error.ErrorMessage = RemoveCakeMarkFailedMessage;
@@ -86,9 +78,7 @@ namespace CakeManager.Client.Components.CakeMark
             if (SuperCakeMarkTally.CakeMarkTally == 0)
                 return;
 
-            SuperCakeMark.UserId = Constants.TemporaryUserId;
-
-            var result = await this.CakeMarkService.RemoveSuperCakeMark(SuperCakeMark);
+            var result = await this.CakeMarkService.RemoveSuperCakeMark();
 
             if (!result)
                 Error.ErrorMessage = RemoveCakeMarkFailedMessage;

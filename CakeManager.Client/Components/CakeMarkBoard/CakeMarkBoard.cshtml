@@ -1,13 +1,6 @@
 ﻿@inherits CakeMarkBoardComponent
 
-<div class="form-group" style="width: 200px">
-    <select class="form-control" onchange="@ChangeOffice" value="@SelectedOfficeId">
-        @foreach (var office in Offices)
-        {
-            <option value="@office.Id">@office.Name</option>
-        }
-    </select>
-</div>
+<OfficeDropdown ref="OfficeDropdown"></OfficeDropdown>
 
 <div class="table-responsive">
     <table class="table">

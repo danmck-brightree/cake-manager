@@ -8,8 +8,9 @@ namespace CakeManager.Repository
     {
         DbSet<CakeMark> CakeMark { get; set; }
         DbSet<Office> Office { get; set; }
-        DbSet<TempUser> TempUser { get; set; }
         DbSet<SuperCakeMark> SuperCakeMark { get; set; }
+        DbSet<ActiveDirectoryUser> ActiveDirectoryUser { get; set; }
         Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

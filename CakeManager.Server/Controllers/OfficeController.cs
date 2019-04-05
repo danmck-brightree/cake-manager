@@ -1,6 +1,7 @@
 ﻿using CakeManager.Logic;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,6 +21,18 @@ namespace CakeManager.Server.Controllers
         public async Task<List<Office>> GetOffices()
         {
             return await this.officeLogic.GetOffices();
+        }
+
+        [HttpGet("user")]
+        public async Task<Guid> GetCurrentUserOfficeId()
+        {
+            return await this.officeLogic.GetCurrentUserOfficeId();
+        }
+
+        [HttpPost("user")]
+        public async Task<bool> SaveCurrentUserOfficeId([FromBody]Guid selectedOfficeId)
+        {
+            return await this.officeLogic.SaveCurrentUserOfficeId(selectedOfficeId);
         }
     }
 }

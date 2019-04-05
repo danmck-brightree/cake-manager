@@ -9,9 +9,9 @@ namespace CakeManager.Client.Services.Interfaces
     {
         Task<int> GetCakeMarkTally();
         Task<int> GetSuperCakeMarkTally();
-        Task<bool> AddCakeMark(CakeMark cakeMark);
-        Task<bool> RemoveCakeMark(CakeMark cakeMark);
-        Task<bool> RemoveSuperCakeMark(SuperCakeMark cakeMark);
+        Task<bool> AddCakeMark();
+        Task<bool> RemoveCakeMark();
+        Task<bool> RemoveSuperCakeMark();
         Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid selectedOfficeId);
     }
 }

@@ -1,0 +1,9 @@
+﻿@page "/office"
+@inherits OfficeComponent
+@layout Layout.Layout
+
+<p>Which office are you in?</p>
+
+<OfficeDropdown ref="OfficeDropdown"/>
+
+<button class="btn btn-primary" onclick="@SaveOffice">Save</button>

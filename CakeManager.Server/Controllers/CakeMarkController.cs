@@ -31,15 +31,15 @@ namespace CakeManager.Server.Controllers
         }
 
         [HttpPost("cakemark")]
-        public async Task<bool> AddCakeMark([FromBody]CakeMark cakeMark)
+        public async Task<bool> AddCakeMark()
         {
-            return await this.cakeMarkLogic.AddCakeMark(cakeMark);
+            return await this.cakeMarkLogic.AddCakeMark();
         }
 
         [HttpDelete("cakemark")]
-        public async Task<IActionResult> RemoveCakeMark(Guid userId)
+        public async Task<IActionResult> RemoveCakeMark()
         {
-            var success = await this.cakeMarkLogic.RemoveCakeMark(userId);
+            var success = await this.cakeMarkLogic.RemoveCakeMark();
 
             if (success)
                 return Ok();
@@ -48,9 +48,9 @@ namespace CakeManager.Server.Controllers
         }
 
         [HttpDelete("supercakemark")]
-        public async Task<IActionResult> RemoveSuperCakeMark(Guid userId)
+        public async Task<IActionResult> RemoveSuperCakeMark()
         {
-            var success = await this.cakeMarkLogic.RemoveSuperCakeMark(userId);
+            var success = await this.cakeMarkLogic.RemoveSuperCakeMark();
 
             if (success)
                 return Ok();

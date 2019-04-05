@@ -38,23 +38,23 @@ namespace CakeManager.Client.Services
             return result;
         }
 
-        public async Task<bool> AddCakeMark(CakeMark cakeMark)
+        public async Task<bool> AddCakeMark()
         {
-            var result = await HttpClient.PostJsonAsync<bool>(CakeMarkUrl, cakeMark);
+            var result = await HttpClient.PostJsonAsync<bool>(CakeMarkUrl, null);
 
             return result;
         }
 
-        public async Task<bool> RemoveCakeMark(CakeMark cakeMark)
+        public async Task<bool> RemoveCakeMark()
         {
-            var result = await HttpClient.DeleteAsync(CakeMarkUrl + "?userId=" + cakeMark.UserId);
+            var result = await HttpClient.DeleteAsync(CakeMarkUrl);
 
             return result;
         }
 
-        public async Task<bool> RemoveSuperCakeMark(SuperCakeMark cakeMark)
+        public async Task<bool> RemoveSuperCakeMark()
         {
-            var result = await HttpClient.DeleteAsync(SuperCakeMarkUrl + "?userId=" + cakeMark.UserId);
+            var result = await HttpClient.DeleteAsync(SuperCakeMarkUrl);
 
             return result;
         }

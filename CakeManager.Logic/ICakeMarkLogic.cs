@@ -9,9 +9,9 @@ namespace CakeManager.Logic
     {
         Task<int> GetCakeMarkTally();
         Task<int> GetSuperCakeMarkTally();
-        Task<bool> AddCakeMark(CakeMark cakeMark);
-        Task<bool> RemoveCakeMark(Guid userId);
-        Task<bool> RemoveSuperCakeMark(Guid userId);
+        Task<bool> AddCakeMark();
+        Task<bool> RemoveCakeMark();
+        Task<bool> RemoveSuperCakeMark();
         Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid officeId);
     }
 }

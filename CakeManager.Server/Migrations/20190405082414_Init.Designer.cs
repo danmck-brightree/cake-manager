@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CakeManager.Server.Migrations
 {
     [DbContext(typeof(CakeMarkDbContext))]
-    [Migration("20190312140206_Init")]
+    [Migration("20190405082414_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,23 @@ namespace CakeManager.Server.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0-preview3.19153.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CakeManager.Repository.Models.ActiveDirectoryUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<Guid?>("OfficeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfficeId");
+
+                    b.ToTable("ActiveDirectoryUser");
+                });
 
             modelBuilder.Entity("CakeManager.Repository.Models.CakeMark", b =>
                 {
@@ -54,12 +71,12 @@ namespace CakeManager.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7357d973-d996-4c94-8806-a6264d158af6"),
+                            Id = new Guid("f0b09b2f-6b1d-4565-94f6-3281009cc314"),
                             Name = "Aberdeen"
                         },
                         new
                         {
-                            Id = new Guid("c4b38f56-a424-41ea-94ed-238131ecf415"),
+                            Id = new Guid("a248d098-f3b5-4da4-a394-09505c56bf9e"),
                             Name = "Glasgow"
                         });
                 });
@@ -82,58 +99,16 @@ namespace CakeManager.Server.Migrations
                     b.ToTable("SuperCakeMark");
                 });
 
-            modelBuilder.Entity("CakeManager.Repository.Models.TempUser", b =>
+            modelBuilder.Entity("CakeManager.Repository.Models.ActiveDirectoryUser", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<Guid>("OfficeId");
-
-                    b.Property<string>("Password")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OfficeId");
-
-                    b.ToTable("TempUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("2234a4e3-7ae6-4882-b204-81f38a3d7d47"),
-                            Email = "dmckenzie@brightree.com",
-                            Name = "Daniel McKenzie",
-                            OfficeId = new Guid("7357d973-d996-4c94-8806-a6264d158af6"),
-                            Password = "temp"
-                        },
-                        new
-                        {
-                            Id = new Guid("9cf309c5-aee8-4952-be05-d377d774875e"),
-                            Email = "jsmith@brightree.com",
-                            Name = "John Smith",
-                            OfficeId = new Guid("7357d973-d996-4c94-8806-a6264d158af6"),
-                            Password = "temp"
-                        },
-                        new
-                        {
-                            Id = new Guid("2fe364cb-e700-4c04-90ee-87908bd2f259"),
-                            Email = "tperson@brightree.com",
-                            Name = "Test Person",
-                            OfficeId = new Guid("c4b38f56-a424-41ea-94ed-238131ecf415"),
-                            Password = "temp"
-                        });
+                    b.HasOne("CakeManager.Repository.Models.Office", "Office")
+                        .WithMany("Users")
+                        .HasForeignKey("OfficeId");
                 });
 
             modelBuilder.Entity("CakeManager.Repository.Models.CakeMark", b =>
                 {
-                    b.HasOne("CakeManager.Repository.Models.TempUser", "User")
+                    b.HasOne("CakeManager.Repository.Models.ActiveDirectoryUser", "User")
                         .WithMany("CakeMarks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -141,17 +116,9 @@ namespace CakeManager.Server.Migrations
 
             modelBuilder.Entity("CakeManager.Repository.Models.SuperCakeMark", b =>
                 {
-                    b.HasOne("CakeManager.Repository.Models.TempUser", "User")
+                    b.HasOne("CakeManager.Repository.Models.ActiveDirectoryUser", "User")
                         .WithMany("SuperCakeMarks")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CakeManager.Repository.Models.TempUser", b =>
-                {
-                    b.HasOne("CakeManager.Repository.Models.Office", "Office")
-                        .WithMany("Users")
-                        .HasForeignKey("OfficeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

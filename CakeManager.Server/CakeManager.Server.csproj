@@ -26,6 +26,10 @@
     <Compile Remove="Migrations\20190312132837_SuperCakeMark.Designer.cs" />
     <Compile Remove="Migrations\20190312133601_SuperCakeMark.cs" />
     <Compile Remove="Migrations\20190312133601_SuperCakeMark.Designer.cs" />
+    <Compile Remove="Migrations\20190312140206_Init.cs" />
+    <Compile Remove="Migrations\20190312140206_Init.Designer.cs" />
+    <Compile Remove="Migrations\20190405075346_Init.cs" />
+    <Compile Remove="Migrations\20190405075346_Init.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

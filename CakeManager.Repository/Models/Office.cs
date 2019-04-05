@@ -14,6 +14,6 @@ namespace CakeManager.Repository.Models
         [Required]
         public string Name { get; set; }
 
-        public virtual List<TempUser> Users { get; set; }
+        public virtual List<ActiveDirectoryUser> Users { get; set; }
     }
 }

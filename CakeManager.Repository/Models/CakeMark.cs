@@ -16,6 +16,6 @@ namespace CakeManager.Repository.Models
 
         public Guid CreatedBy { get; set; }
 
-        public virtual TempUser User { get; set; }
+        public virtual ActiveDirectoryUser User { get; set; }
     }
 }

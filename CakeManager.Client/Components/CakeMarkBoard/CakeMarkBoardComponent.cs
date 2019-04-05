@@ -1,4 +1,5 @@
-﻿using CakeManager.Client.Services.Interfaces;
+﻿using CakeManager.Client.Components.OfficeDropdown;
+using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -10,49 +11,28 @@ namespace CakeManager.Client.Components.CakeMarkBoard
 {
     public class CakeMarkBoardComponent : ComponentBase
     {
-        [Inject] protected IOfficeService OfficeService { get; set; }
         [Inject] protected ICakeMarkService CakeMarkService { get; set; }
         [Inject] protected ITokenService TokenService { get; set; }
 
-        protected List<Office> Offices { get; set; } = new List<Office>();
+        protected OfficeDropdownComponent OfficeDropdown { get; set; }
+
         protected List<CakeMarkGridData> CakeMarkGridData { get; set; } = new List<CakeMarkGridData>();
 
-        protected Guid SelectedOfficeId { get; set; }
-
-        protected override async Task OnInitAsync()
+        protected override async Task OnAfterRenderAsync()
         {
-            if (!this.TokenService.IsLoggedIn)
-                return;
+            OfficeDropdown.onSelectedOfficeChanged += async (Guid selectedOfficeId) => await ChangeOffice(selectedOfficeId);
 
-            this.Offices = await OfficeService.GetOffices();
-
-            this.SelectedOfficeId = this.Offices
-                .Where(x => x.Selected)
-                .Select(x => x.Id)
-                .FirstOrDefault();
-
-            await this.ChangeOffice(new UIChangeEventArgs
-            {
-                Value = SelectedOfficeId
-            });
-
-            StateHasChanged();
-
-            await base.OnInitAsync();
+            await base.OnAfterRenderAsync();
         }
 
-        protected async Task ChangeOffice(UIChangeEventArgs changeEvent)
+        protected async Task ChangeOffice(Guid selectedOfficeId)
         {
-            this.SelectedOfficeId = new Guid(changeEvent.Value.ToString());
-            this.CakeMarkGridData = await CakeMarkService.GetCakeMarkGridData(this.SelectedOfficeId);
+            this.CakeMarkGridData = await CakeMarkService.GetCakeMarkGridData(selectedOfficeId);
         }
 
         public async Task Refresh()
         {
-            await this.ChangeOffice(new UIChangeEventArgs
-            {
-                Value = this.SelectedOfficeId
-            });
+            await this.ChangeOffice(this.OfficeDropdown.SelectedOfficeId);
 
             StateHasChanged();
         }

@@ -1,6 +1,7 @@
 ﻿using CakeManager.Client.Extensions;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,10 +17,21 @@ namespace CakeManager.Client.Services
         }
 
         private const string OfficeUrl = "/api/Office/Offices";
+        private const string CurrentUserOfficeUrl = "/api/Office/User";
 
         public async Task<List<Office>> GetOffices()
         {
             return await HttpClient.GetJsonAsync<List<Office>>(OfficeUrl);
+        }
+
+        public async Task<Guid> GetCurrentUserOfficeId()
+        {
+            return await HttpClient.GetJsonAsync<Guid>(CurrentUserOfficeUrl);
+        }
+
+        public async Task<bool> SaveCurrentUserOfficeId(Guid selectedOfficeId)
+        {
+            return await HttpClient.PostJsonAsync<bool>(CurrentUserOfficeUrl, selectedOfficeId);
         }
     }
 }

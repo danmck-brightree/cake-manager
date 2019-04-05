@@ -20,24 +20,22 @@ namespace CakeManager.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TempUser",
+                name: "ActiveDirectoryUser",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    OfficeId = table.Column<Guid>(nullable: false)
+                    OfficeId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TempUser", x => x.Id);
+                    table.PrimaryKey("PK_ActiveDirectoryUser", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TempUser_Office_OfficeId",
+                        name: "FK_ActiveDirectoryUser_Office_OfficeId",
                         column: x => x.OfficeId,
                         principalTable: "Office",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,9 +51,9 @@ namespace CakeManager.Server.Migrations
                 {
                     table.PrimaryKey("PK_CakeMark", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CakeMark_TempUser_UserId",
+                        name: "FK_CakeMark_ActiveDirectoryUser_UserId",
                         column: x => x.UserId,
-                        principalTable: "TempUser",
+                        principalTable: "ActiveDirectoryUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -73,9 +71,9 @@ namespace CakeManager.Server.Migrations
                 {
                     table.PrimaryKey("PK_SuperCakeMark", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SuperCakeMark_TempUser_UserId",
+                        name: "FK_SuperCakeMark_ActiveDirectoryUser_UserId",
                         column: x => x.UserId,
-                        principalTable: "TempUser",
+                        principalTable: "ActiveDirectoryUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -83,27 +81,17 @@ namespace CakeManager.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Office",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("7357d973-d996-4c94-8806-a6264d158af6"), "Aberdeen" });
+                values: new object[] { new Guid("f0b09b2f-6b1d-4565-94f6-3281009cc314"), "Aberdeen" });
 
             migrationBuilder.InsertData(
                 table: "Office",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("c4b38f56-a424-41ea-94ed-238131ecf415"), "Glasgow" });
+                values: new object[] { new Guid("a248d098-f3b5-4da4-a394-09505c56bf9e"), "Glasgow" });
 
-            migrationBuilder.InsertData(
-                table: "TempUser",
-                columns: new[] { "Id", "Email", "Name", "OfficeId", "Password" },
-                values: new object[] { new Guid("2234a4e3-7ae6-4882-b204-81f38a3d7d47"), "dmckenzie@brightree.com", "Daniel McKenzie", new Guid("7357d973-d996-4c94-8806-a6264d158af6"), "temp" });
-
-            migrationBuilder.InsertData(
-                table: "TempUser",
-                columns: new[] { "Id", "Email", "Name", "OfficeId", "Password" },
-                values: new object[] { new Guid("9cf309c5-aee8-4952-be05-d377d774875e"), "jsmith@brightree.com", "John Smith", new Guid("7357d973-d996-4c94-8806-a6264d158af6"), "temp" });
-
-            migrationBuilder.InsertData(
-                table: "TempUser",
-                columns: new[] { "Id", "Email", "Name", "OfficeId", "Password" },
-                values: new object[] { new Guid("2fe364cb-e700-4c04-90ee-87908bd2f259"), "tperson@brightree.com", "Test Person", new Guid("c4b38f56-a424-41ea-94ed-238131ecf415"), "temp" });
+            migrationBuilder.CreateIndex(
+                name: "IX_ActiveDirectoryUser_OfficeId",
+                table: "ActiveDirectoryUser",
+                column: "OfficeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CakeMark_UserId",
@@ -114,11 +102,6 @@ namespace CakeManager.Server.Migrations
                 name: "IX_SuperCakeMark_UserId",
                 table: "SuperCakeMark",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TempUser_OfficeId",
-                table: "TempUser",
-                column: "OfficeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -130,7 +113,7 @@ namespace CakeManager.Server.Migrations
                 name: "SuperCakeMark");
 
             migrationBuilder.DropTable(
-                name: "TempUser");
+                name: "ActiveDirectoryUser");
 
             migrationBuilder.DropTable(
                 name: "Office");

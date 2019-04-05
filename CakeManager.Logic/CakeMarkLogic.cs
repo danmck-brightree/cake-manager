@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 
 namespace CakeManager.Logic
 {
-    public class CakeMarkLogic : ICakeMarkLogic
+    public class CakeMarkLogic : BaseLogic, ICakeMarkLogic
     {
         private readonly ICakeMarkDbContext cakeMarkDbContext;
 
-        private Guid? currentUserId = null;
-
         public CakeMarkLogic(ICakeMarkDbContext cakeMarkDbContext, IHttpContextAccessor httpContext)
+            : base(cakeMarkDbContext, httpContext)
         {
             this.cakeMarkDbContext = cakeMarkDbContext;
-            this.currentUserId = Constants.TemporaryUserId;
         }
 
         public async Task<int> GetCakeMarkTally()
@@ -26,7 +24,7 @@ namespace CakeManager.Logic
             try
             {
                 return await this.cakeMarkDbContext.CakeMark
-                    .Where(x => x.UserId == this.currentUserId.Value)
+                    .Where(x => x.UserId == this.CurrentUserId.Value)
                     .CountAsync();
             }
             catch
@@ -40,7 +38,7 @@ namespace CakeManager.Logic
             try
             {
                 return await this.cakeMarkDbContext.SuperCakeMark
-                    .Where(x => x.UserId == this.currentUserId.Value)
+                    .Where(x => x.UserId == this.CurrentUserId.Value)
                     .CountAsync();
             }
             catch
@@ -49,18 +47,18 @@ namespace CakeManager.Logic
             }
         }
         
-        public async Task<bool> AddCakeMark(CakeMark cakeMark)
+        public async Task<bool> AddCakeMark()
         {
             try
             {
                 var existingCakeMarks = this.cakeMarkDbContext.CakeMark
-                    .Where(x => x.CreatedBy == this.currentUserId.Value)
+                    .Where(x => x.CreatedBy == this.CurrentUserId.Value)
                     .Count();
 
                 if (existingCakeMarks + 1 == Constants.CakeMarkTallyMax)
                 {
                     var existingSuperCakeMarks = this.cakeMarkDbContext.SuperCakeMark
-                        .Where(x => x.CreatedBy == this.currentUserId.Value)
+                        .Where(x => x.CreatedBy == this.CurrentUserId.Value)
                         .Count();
 
                     if (existingSuperCakeMarks == Constants.SuperCakeMarkTallyMax)
@@ -68,15 +66,15 @@ namespace CakeManager.Logic
 
                     var dbSuperCakeMark = new Repository.Models.SuperCakeMark
                     {
-                        UserId = cakeMark.UserId,
-                        CreatedBy = this.currentUserId.Value,
+                        UserId = this.CurrentUserId.Value,
+                        CreatedBy = this.CurrentUserId.Value,
                         CreatedDate = DateTime.UtcNow
                     };
 
                     await this.cakeMarkDbContext.SuperCakeMark.AddAsync(dbSuperCakeMark);
 
-                    var officeId = this.cakeMarkDbContext.TempUser
-                        .Where(x => x.Id == this.currentUserId.Value)
+                    var officeId = this.cakeMarkDbContext.ActiveDirectoryUser
+                        .Where(x => x.Id == this.CurrentUserId.Value)
                         .Select(x => x.OfficeId)
                         .FirstOrDefault();
 
@@ -87,10 +85,12 @@ namespace CakeManager.Logic
                     return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
                 }
 
-                var dbCakeMark = AutoMapper.Mapper.Map<Repository.Models.CakeMark>(cakeMark);
-
-                dbCakeMark.CreatedDate = DateTime.UtcNow;
-                dbCakeMark.CreatedBy = this.currentUserId.Value;
+                var dbCakeMark = new Repository.Models.CakeMark
+                {
+                    UserId = this.CurrentUserId.Value,
+                    CreatedDate = DateTime.UtcNow,
+                    CreatedBy = this.CurrentUserId.Value,
+                };
 
                 await this.cakeMarkDbContext.CakeMark.AddAsync(dbCakeMark);
 
@@ -102,12 +102,12 @@ namespace CakeManager.Logic
             }
         }
 
-        public async Task<bool> RemoveCakeMark(Guid userId)
+        public async Task<bool> RemoveCakeMark()
         {
             try
             {
                 var dbCakeMark = this.cakeMarkDbContext.CakeMark
-                    .Where(x => x.UserId == userId)
+                    .Where(x => x.UserId == this.CurrentUserId.Value)
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
@@ -126,12 +126,12 @@ namespace CakeManager.Logic
             }
         }
 
-        public async Task<bool> RemoveSuperCakeMark(Guid userId)
+        public async Task<bool> RemoveSuperCakeMark()
         {
             try
             {
                 var dbCakeMark = this.cakeMarkDbContext.SuperCakeMark
-                    .Where(x => x.UserId == userId)
+                    .Where(x => x.UserId == this.CurrentUserId.Value)
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
@@ -154,11 +154,11 @@ namespace CakeManager.Logic
         {
             try
             {
-                return await this.cakeMarkDbContext.TempUser
+                return await this.cakeMarkDbContext.ActiveDirectoryUser
                     .Where(x => x.OfficeId == officeId)
                     .Select(x => new CakeMarkGridData
                     {
-                        Name = x.Name,
+                        Name = x.Email,
                         CakeMarks = x.CakeMarks.Count(),
                         SuperCakeMarks = x.SuperCakeMarks.Count()
                     })

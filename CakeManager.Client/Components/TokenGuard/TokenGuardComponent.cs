@@ -10,13 +10,24 @@ namespace CakeManager.Client.Components.TokenGuard
     {
         [Inject] protected IUriHelper UriHelper { get; set; }
         [Inject] protected ITokenService TokenService { get; set; }
+        [Inject] protected IOfficeService OfficeService { get; set; }
 
         protected override async Task OnInitAsync()
         {
             var token = await TokenService.GetToken();
 
             if (token == null)
+            {
                 UriHelper.NavigateTo(Constants.LoginRoute);
+                return;
+            }
+
+            var officeId = await OfficeService.GetCurrentUserOfficeId();
+            if (officeId == default)
+            {
+                UriHelper.NavigateTo(Constants.OfficeRoute);
+                return;
+            }
 
             await base.OnInitAsync();
         }
