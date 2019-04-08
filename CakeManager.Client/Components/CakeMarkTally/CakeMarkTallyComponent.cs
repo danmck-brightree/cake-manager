@@ -13,6 +13,8 @@ namespace CakeManager.Client.Components.CakeMarkTally
 
         [Parameter] protected CakeMarkType CakeMarkType { get; set; } = CakeMarkType.Normal;
 
+        public event Action OnCakeMarkTallyUpdate;
+
         protected string CakeMarkDisplay
         {
             get
@@ -55,6 +57,7 @@ namespace CakeManager.Client.Components.CakeMarkTally
             {
                 this.cakeMarkTally = value;
                 StateHasChanged();
+                OnCakeMarkTallyUpdate?.Invoke();
             }
         }
 
@@ -88,6 +91,8 @@ namespace CakeManager.Client.Components.CakeMarkTally
                     this.CakeMarkTally = await this.CakeMarkService.GetSuperCakeMarkTally();
                     break;
             }
+
+            OnCakeMarkTallyUpdate?.Invoke();
         }
     }
 }

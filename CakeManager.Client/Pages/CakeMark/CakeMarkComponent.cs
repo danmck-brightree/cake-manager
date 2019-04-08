@@ -31,12 +31,33 @@ namespace CakeManager.Client.Pages.CakeMark
         private const string RemoveCakeMarkSuccessMessage = "Remove cake mark success.";
         private const string RemoveSuperCakeMarkSuccessMessage = "Remove super cake mark success.";
 
+        protected bool CanRemoveCakeMark
+        {
+            get
+            {
+                return !(CakeMarkTally != null && CakeMarkTally.CakeMarkTally.HasValue && CakeMarkTally.CakeMarkTally.Value > 0);
+            }
+        }
+
+        protected bool CanRemoveSuperCakeMark
+        {
+            get
+            {
+                return !(SuperCakeMarkTally != null && SuperCakeMarkTally.CakeMarkTally.HasValue && SuperCakeMarkTally.CakeMarkTally.Value > 0);
+            }
+        }
+
         protected override async Task OnAfterRenderAsync()
         {
             Action onClickAction = async () => await AddConfirmedCakeMark();
 
             Modal.onClick -= onClickAction;
             Modal.onClick += onClickAction;
+
+            CakeMarkTally.OnCakeMarkTallyUpdate -= StateHasChanged;
+            CakeMarkTally.OnCakeMarkTallyUpdate += StateHasChanged;
+            SuperCakeMarkTally.OnCakeMarkTallyUpdate -= StateHasChanged;
+            SuperCakeMarkTally.OnCakeMarkTallyUpdate += StateHasChanged;
 
             await base.OnAfterRenderAsync();
         }

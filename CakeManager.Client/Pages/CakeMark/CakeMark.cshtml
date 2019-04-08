@@ -10,11 +10,11 @@
     <CakeMarkTally ref="CakeMarkTally"/>
 
     <button class="btn btn-danger" onclick="@AddCakeMark">Add cake mark!</button>
-    <button class="btn btn-success" onclick="@RemoveCakeMark">Remove cake mark!</button>
+    <button class="btn btn-success" onclick="@RemoveCakeMark" disabled="@CanRemoveCakeMark">Remove cake mark!</button>
 
     <CakeMarkTally ref="SuperCakeMarkTally" CakeMarkType="@CakeMarkType.Super"/>
 
-    <button class="btn btn-warning" onclick="@RemoveSuperCakeMark">I brought cake!</button>
+    <button class="btn btn-warning" onclick="@RemoveSuperCakeMark" disabled="@CanRemoveSuperCakeMark">I brought cake!</button>
 
 </div>
 
