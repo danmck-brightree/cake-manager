@@ -6,7 +6,7 @@ using CakeManager.Client.Services.Interfaces;
 using CakeManager.Client.Components.Error;
 using System;
 
-namespace CakeManager.Client.Components.Login
+namespace CakeManager.Client.Pages.Login
 {
     public class LoginComponent : ComponentBase
     {

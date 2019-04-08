@@ -5,13 +5,13 @@ using CakeManager.Client.Components.CakeMarkTally;
 using CakeManager.Client.Components.Error;
 using CakeManager.Client.Components.Modal;
 using CakeManager.Client.Components.TokenGuard;
-using CakeManager.Client.Extensions;
+using CakeManager.Client.Utilities;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace CakeManager.Client.Components.CakeMark
+namespace CakeManager.Client.Pages.CakeMark
 {
     public class CakeMarkComponent : TokenGuardComponent
     {

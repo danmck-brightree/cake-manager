@@ -7,7 +7,7 @@ using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Services;
 
-namespace CakeManager.Client.Components.Office
+namespace CakeManager.Client.Pages.Office
 {
     public class OfficeComponent : TokenGuardComponent
     {

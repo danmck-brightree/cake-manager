@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace CakeManager.Client.Extensions
+namespace CakeManager.Client.Utilities
 {
     public class TokenHttpClient : ITokenHttpClient
     {

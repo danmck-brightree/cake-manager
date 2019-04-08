@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace CakeManager.Client.Extensions
+namespace CakeManager.Client.Utilities
 {
     public static class JSRuntimeExtensions
     {

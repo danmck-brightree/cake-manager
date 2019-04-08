@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Layouts;
 using System.Threading.Tasks;
 
-namespace CakeManager.Client.Components.Layout
+namespace CakeManager.Client.Pages.Layout
 {
     public class LayoutComponent : LayoutComponentBase
     {

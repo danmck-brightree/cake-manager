@@ -1,4 +1,4 @@
-﻿using CakeManager.Client.Extensions;
+﻿using CakeManager.Client.Utilities;
 using CakeManager.Client.Services.Interfaces;
 using Microsoft.JSInterop;
 using System;

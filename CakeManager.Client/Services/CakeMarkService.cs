@@ -1,4 +1,4 @@
-﻿using CakeManager.Client.Extensions;
+﻿using CakeManager.Client.Utilities;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
