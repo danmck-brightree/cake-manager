@@ -3,7 +3,6 @@ using CakeManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,11 +11,14 @@ namespace CakeManager.Logic
     public class CakeMarkLogic : BaseLogic, ICakeMarkLogic
     {
         private readonly ICakeMarkDbContext cakeMarkDbContext;
+        private readonly IOfficeLogic officeLogic;
+        
 
-        public CakeMarkLogic(ICakeMarkDbContext cakeMarkDbContext, IHttpContextAccessor httpContext)
+        public CakeMarkLogic(ICakeMarkDbContext cakeMarkDbContext, IHttpContextAccessor httpContext, IOfficeLogic officeLogic)
             : base(cakeMarkDbContext, httpContext)
         {
             this.cakeMarkDbContext = cakeMarkDbContext;
+            this.officeLogic = officeLogic;
         }
 
         public async Task<int> GetCakeMarkTally()
@@ -47,10 +49,17 @@ namespace CakeManager.Logic
             }
         }
         
-        public async Task<bool> AddCakeMark()
+        public async Task<CakeMarkResult> AddCakeMark(DateTime latestEventDate)
         {
             try
             {
+                if (await CheckDataExpired(latestEventDate))
+                    return new CakeMarkResult
+                    {
+                        Success = false,
+                        Status = CakeMarkResult.StatusType.ExpiredData
+                    };
+
                 var existingCakeMarks = this.cakeMarkDbContext.CakeMark
                     .Where(x => x.CreatedBy == this.CurrentUserId.Value)
                     .Count();
@@ -62,7 +71,11 @@ namespace CakeManager.Logic
                         .Count();
 
                     if (existingSuperCakeMarks == Constants.SuperCakeMarkTallyMax)
-                        return true;
+                        return new CakeMarkResult
+                        {
+                            Success = true,
+                            Status = CakeMarkResult.StatusType.LimitReached
+                        };
 
                     var dbSuperCakeMark = new Repository.Models.SuperCakeMark
                     {
@@ -82,7 +95,10 @@ namespace CakeManager.Logic
                         .RemoveRange(this.cakeMarkDbContext.CakeMark
                             .Where(x => x.User.OfficeId == officeId));
 
-                    return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+                    return new CakeMarkResult
+                    {
+                        Success = (await this.cakeMarkDbContext.SaveChangesAsync()) > 0
+                    };
                 }
 
                 var dbCakeMark = new Repository.Models.CakeMark
@@ -94,79 +110,146 @@ namespace CakeManager.Logic
 
                 await this.cakeMarkDbContext.CakeMark.AddAsync(dbCakeMark);
 
-                return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+                var success = (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+                return new CakeMarkResult
+                {
+                    Success = success
+                };
             }
             catch
             {
-                return false;
+                return new CakeMarkResult
+                {
+                    Success = false,
+                    Status = CakeMarkResult.StatusType.Exception
+                };
             }
         }
 
-        public async Task<bool> RemoveCakeMark()
+        public async Task<CakeMarkResult> RemoveCakeMark(DateTime latestEventDate)
         {
             try
             {
+                if (await CheckDataExpired(latestEventDate))
+                    return new CakeMarkResult
+                    {
+                        Success = false,
+                        Status = CakeMarkResult.StatusType.ExpiredData
+                    };
+
                 var dbCakeMark = this.cakeMarkDbContext.CakeMark
                     .Where(x => x.UserId == this.CurrentUserId.Value)
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
                 if (dbCakeMark == null)
-                    return false;
+                    return new CakeMarkResult
+                    {
+                        Success = false,
+                        Status = CakeMarkResult.StatusType.ExpiredData
+                    };
 
-                this.cakeMarkDbContext.CakeMark.Remove(dbCakeMark);
+                dbCakeMark.IsDeleted = true;
 
-                var result = await this.cakeMarkDbContext.SaveChangesAsync();
-
-                return result > 0;
+                return new CakeMarkResult
+                {
+                    Success = (await this.cakeMarkDbContext.SaveChangesAsync()) > 0
+                };
             }
             catch
             {
-                return false;
+                return new CakeMarkResult
+                {
+                    Success = false,
+                    Status = CakeMarkResult.StatusType.Exception
+                };
             }
         }
 
-        public async Task<bool> RemoveSuperCakeMark()
+        public async Task<CakeMarkResult> RemoveSuperCakeMark(DateTime latestEventDate)
         {
             try
             {
+                if (await CheckDataExpired(latestEventDate))
+                    return new CakeMarkResult
+                    {
+                        Success = false,
+                        Status = CakeMarkResult.StatusType.ExpiredData
+                    };
+
                 var dbCakeMark = this.cakeMarkDbContext.SuperCakeMark
                     .Where(x => x.UserId == this.CurrentUserId.Value)
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
                 if (dbCakeMark == null)
-                    return false;
+                    return new CakeMarkResult
+                    {
+                        Success = false,
+                        Status = CakeMarkResult.StatusType.ExpiredData
+                    };
 
-                this.cakeMarkDbContext.SuperCakeMark.Remove(dbCakeMark);
+                dbCakeMark.IsDeleted = true;
 
-                var result = await this.cakeMarkDbContext.SaveChangesAsync();
-
-                return result > 0;
+                return new CakeMarkResult
+                {
+                    Success = (await this.cakeMarkDbContext.SaveChangesAsync()) > 0
+                };
             }
             catch
             {
-                return false;
+                return new CakeMarkResult
+                {
+                    Success = false,
+                    Status = CakeMarkResult.StatusType.Exception
+                };
             }
         }
+
+        private async Task<bool> CheckDataExpired(DateTime latestEventDate)
+        {
+            var officeId = await officeLogic.GetCurrentUserOfficeId();
+            if (officeId == Guid.Empty)
+                return true;
+
+            var gridData = await GetCakeMarkGridData(officeId);
+            if (gridData == null)
+                return true;
+
+            return latestEventDate != gridData.LatestEventDate;
+        }
         
-        public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid officeId)
+        public async Task<CakeMarkGridData> GetCakeMarkGridData(Guid officeId)
         {
             try
             {
-                return await this.cakeMarkDbContext.ActiveDirectoryUser
+                var cakeMarkGridDataItems = await this.cakeMarkDbContext.ActiveDirectoryUser
                     .Where(x => x.OfficeId == officeId)
-                    .Select(x => new CakeMarkGridData
+                    .Select(x => new CakeMarkGridDataItem
                     {
                         Name = x.Email,
-                        CakeMarks = x.CakeMarks.Count(),
-                        SuperCakeMarks = x.SuperCakeMarks.Count()
+                        CakeMarks = x.CakeMarks.Where(y => !y.IsDeleted).Count(),
+                        SuperCakeMarks = x.SuperCakeMarks.Where(y => !y.IsDeleted).Count(),
+                        LatestEventDate = new[]
+                        {
+                            x.CakeMarks.Select(y => y.CreatedDate).DefaultIfEmpty(DateTime.MinValue).Max(),
+                            x.SuperCakeMarks.Select(y => y.CreatedDate).DefaultIfEmpty(DateTime.MinValue).Max()
+                        }
+                        .Max()
                     })
                     .ToListAsync();
+
+                var data = new CakeMarkGridData
+                {
+                    Items = cakeMarkGridDataItems,
+                    LatestEventDate = cakeMarkGridDataItems.Max(x => x.LatestEventDate)
+                };
+
+                return data;
             }
             catch
             {
-                return new List<CakeMarkGridData>();
+                return new CakeMarkGridData();
             }
         }
     }

@@ -1,12 +1,7 @@
 ﻿using CakeManager.Client.Utilities;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace CakeManager.Client.Services
@@ -23,6 +18,8 @@ namespace CakeManager.Client.Services
         private const string CakeMarkUrl = "/api/CakeMark/CakeMark";
         private const string CakeMarksUrl = "/api/CakeMark/CakeMarks";
         private const string SuperCakeMarkUrl = "/api/CakeMark/SuperCakeMark";
+        private const string CakeMarkDeleteUrl = "/api/CakeMark/DeleteCakeMark";
+        private const string SuperCakeMarkDeleteUrl = "/api/CakeMark/DeleteSuperCakeMark";
 
         public async Task<int> GetCakeMarkTally()
         {
@@ -38,30 +35,30 @@ namespace CakeManager.Client.Services
             return result;
         }
 
-        public async Task<bool> AddCakeMark()
+        public async Task<CakeMarkResult> AddCakeMark(DateTime latestEventDate)
         {
-            var result = await HttpClient.PostJsonAsync<bool>(CakeMarkUrl, null);
+            var result = await HttpClient.PostJsonAsync<CakeMarkResult>(CakeMarkUrl, latestEventDate);
 
             return result;
         }
 
-        public async Task<bool> RemoveCakeMark()
+        public async Task<CakeMarkResult> RemoveCakeMark(DateTime latestEventDate)
         {
-            var result = await HttpClient.DeleteAsync(CakeMarkUrl);
+            var result = await HttpClient.PostJsonAsync<CakeMarkResult>(CakeMarkDeleteUrl, latestEventDate);
 
             return result;
         }
 
-        public async Task<bool> RemoveSuperCakeMark()
+        public async Task<CakeMarkResult> RemoveSuperCakeMark(DateTime latestEventDate)
         {
-            var result = await HttpClient.DeleteAsync(SuperCakeMarkUrl);
+            var result = await HttpClient.PostJsonAsync<CakeMarkResult>(SuperCakeMarkDeleteUrl, latestEventDate);
 
             return result;
         }
 
-        public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid selectedOfficeId)
+        public async Task<CakeMarkGridData> GetCakeMarkGridData(Guid selectedOfficeId)
         {
-            var result = await HttpClient.GetJsonAsync<List<CakeMarkGridData>>(CakeMarksUrl + string.Format("?officeId={0}", selectedOfficeId));
+            var result = await HttpClient.GetJsonAsync<CakeMarkGridData>(CakeMarksUrl + string.Format("?officeId={0}", selectedOfficeId));
 
             return result;
         }

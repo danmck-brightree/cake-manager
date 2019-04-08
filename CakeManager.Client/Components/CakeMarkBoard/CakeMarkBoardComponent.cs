@@ -16,7 +16,7 @@ namespace CakeManager.Client.Components.CakeMarkBoard
 
         protected OfficeDropdownComponent OfficeDropdown { get; set; }
 
-        protected List<CakeMarkGridData> CakeMarkGridData { get; set; } = new List<CakeMarkGridData>();
+        public CakeMarkGridData CakeMarkGridData { get; private set; } = new CakeMarkGridData();
 
         protected override async Task OnAfterRenderAsync()
         {

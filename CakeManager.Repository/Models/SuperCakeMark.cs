@@ -16,6 +16,8 @@ namespace CakeManager.Repository.Models
 
         public Guid CreatedBy { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public virtual ActiveDirectoryUser User { get; set; }
     }
 }

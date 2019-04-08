@@ -31,35 +31,25 @@ namespace CakeManager.Server.Controllers
         }
 
         [HttpPost("cakemark")]
-        public async Task<bool> AddCakeMark()
+        public async Task<CakeMarkResult> AddCakeMark([FromBody]DateTime latestEventDate)
         {
-            return await this.cakeMarkLogic.AddCakeMark();
+            return await this.cakeMarkLogic.AddCakeMark(latestEventDate);
         }
 
-        [HttpDelete("cakemark")]
-        public async Task<IActionResult> RemoveCakeMark()
+        [HttpPost("deletecakemark")]
+        public async Task<CakeMarkResult> RemoveCakeMark([FromBody]DateTime latestEventDate)
         {
-            var success = await this.cakeMarkLogic.RemoveCakeMark();
-
-            if (success)
-                return Ok();
-            else
-                return BadRequest();
+            return await this.cakeMarkLogic.RemoveCakeMark(latestEventDate);
         }
 
-        [HttpDelete("supercakemark")]
-        public async Task<IActionResult> RemoveSuperCakeMark()
+        [HttpPost("deletesupercakemark")]
+        public async Task<CakeMarkResult> RemoveSuperCakeMark([FromBody]DateTime latestEventDate)
         {
-            var success = await this.cakeMarkLogic.RemoveSuperCakeMark();
-
-            if (success)
-                return Ok();
-            else
-                return BadRequest();
+            return await this.cakeMarkLogic.RemoveSuperCakeMark(latestEventDate);
         }
 
         [HttpGet("cakemarks")]
-        public async Task<List<CakeMarkGridData>> GetCakeMarkGridData(Guid officeId)
+        public async Task<CakeMarkGridData> GetCakeMarkGridData(Guid officeId)
         {
             return await this.cakeMarkLogic.GetCakeMarkGridData(officeId);
         }

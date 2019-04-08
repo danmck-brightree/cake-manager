@@ -77,26 +77,17 @@ namespace CakeManager.Client.Pages.CakeMark
         {
             Error.ErrorMessage = null;
 
-            var result = await this.CakeMarkService.AddCakeMark();
+            var result = await this.CakeMarkService.AddCakeMark(CakeMarkBoard.CakeMarkGridData.LatestEventDate);
 
             await JSRuntime.HideModal("addCakeMarkModal");
 
-            if (!result)
-                Error.ErrorMessage = AddCakeMarkFailedMessage;
+            if (!result.Success)
+                Error.ErrorMessage = result.GetStatusMessage(AddCakeMarkFailedMessage);
             else
-            {
                 await ToastService.ShowToast(AddCakeMarkSuccessMessage);
 
-                if ((CakeMarkTally.CakeMarkTally + 1) < Constants.CakeMarkTallyMax)
-                    CakeMarkTally.CakeMarkTally++;
-                else
-                {
-                    CakeMarkTally.CakeMarkTally = 0;
-                    if (SuperCakeMarkTally.CakeMarkTally < Constants.SuperCakeMarkTallyMax)
-                        SuperCakeMarkTally.CakeMarkTally++;
-                }
-            }
-
+            await CakeMarkTally.Refresh();
+            await SuperCakeMarkTally.Refresh();
             await CakeMarkBoard.Refresh();
         }
 
@@ -104,19 +95,14 @@ namespace CakeManager.Client.Pages.CakeMark
         {
             Error.ErrorMessage = null;
 
-            if (CakeMarkTally.CakeMarkTally == 0)
-                return;
+            var result = await this.CakeMarkService.RemoveCakeMark(CakeMarkBoard.CakeMarkGridData.LatestEventDate);
 
-            var result = await this.CakeMarkService.RemoveCakeMark();
-
-            if (!result)
-                Error.ErrorMessage = RemoveCakeMarkFailedMessage;
+            if (!result.Success)
+                Error.ErrorMessage = result.GetStatusMessage(RemoveCakeMarkFailedMessage);
             else
-            {
                 await ToastService.ShowToast(RemoveCakeMarkSuccessMessage);
-                CakeMarkTally.CakeMarkTally--;
-            }
 
+            await CakeMarkTally.Refresh();
             await CakeMarkBoard.Refresh();
         }
 
@@ -127,16 +113,14 @@ namespace CakeManager.Client.Pages.CakeMark
             if (SuperCakeMarkTally.CakeMarkTally == 0)
                 return;
 
-            var result = await this.CakeMarkService.RemoveSuperCakeMark();
+            var result = await this.CakeMarkService.RemoveSuperCakeMark(CakeMarkBoard.CakeMarkGridData.LatestEventDate);
 
-            if (!result)
-                Error.ErrorMessage = RemoveCakeMarkFailedMessage;
+            if (!result.Success)
+                Error.ErrorMessage = result.GetStatusMessage(RemoveCakeMarkFailedMessage);
             else
-            {
-                SuperCakeMarkTally.CakeMarkTally--;
                 await ToastService.ShowToast(RemoveSuperCakeMarkSuccessMessage);
-            }
 
+            await SuperCakeMarkTally.Refresh();
             await CakeMarkBoard.Refresh();
         }
     }

@@ -82,6 +82,11 @@ namespace CakeManager.Client.Components.CakeMarkTally
             if (this.isLoggedInAction != null)
                 TokenService.onStatusChanged -= isLoggedInAction;
 
+            await Refresh();
+        }
+
+        public async Task Refresh()
+        {
             switch (this.CakeMarkType)
             {
                 case CakeMarkType.Normal:
