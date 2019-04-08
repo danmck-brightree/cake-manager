@@ -26,7 +26,7 @@ namespace CakeManager.Logic
             try
             {
                 return await this.cakeMarkDbContext.CakeMark
-                    .Where(x => x.UserId == this.CurrentUserId.Value)
+                    .Where(x => !x.IsDeleted && x.UserId == this.CurrentUserId.Value)
                     .CountAsync();
             }
             catch
@@ -40,7 +40,7 @@ namespace CakeManager.Logic
             try
             {
                 return await this.cakeMarkDbContext.SuperCakeMark
-                    .Where(x => x.UserId == this.CurrentUserId.Value)
+                    .Where(x => !x.IsDeleted && x.UserId == this.CurrentUserId.Value)
                     .CountAsync();
             }
             catch
@@ -61,13 +61,13 @@ namespace CakeManager.Logic
                     };
 
                 var existingCakeMarks = this.cakeMarkDbContext.CakeMark
-                    .Where(x => x.CreatedBy == this.CurrentUserId.Value)
+                    .Where(x => !x.IsDeleted && x.CreatedBy == this.CurrentUserId.Value)
                     .Count();
 
                 if (existingCakeMarks + 1 == Constants.CakeMarkTallyMax)
                 {
                     var existingSuperCakeMarks = this.cakeMarkDbContext.SuperCakeMark
-                        .Where(x => x.CreatedBy == this.CurrentUserId.Value)
+                        .Where(x => !x.IsDeleted && x.CreatedBy == this.CurrentUserId.Value)
                         .Count();
 
                     if (existingSuperCakeMarks == Constants.SuperCakeMarkTallyMax)
@@ -138,7 +138,7 @@ namespace CakeManager.Logic
                     };
 
                 var dbCakeMark = this.cakeMarkDbContext.CakeMark
-                    .Where(x => x.UserId == this.CurrentUserId.Value)
+                    .Where(x => !x.IsDeleted && x.UserId == this.CurrentUserId.Value)
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
@@ -178,7 +178,7 @@ namespace CakeManager.Logic
                     };
 
                 var dbCakeMark = this.cakeMarkDbContext.SuperCakeMark
-                    .Where(x => x.UserId == this.CurrentUserId.Value)
+                    .Where(x => !x.IsDeleted && x.UserId == this.CurrentUserId.Value)
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
