@@ -1,4 +1,4 @@
-﻿window.showToast = async () => {
-    $(".toast").toast("show");
+﻿window.showToast = async (data) => {
+    $("#Toast_" + data.id).toast("show");
     return true;
 };

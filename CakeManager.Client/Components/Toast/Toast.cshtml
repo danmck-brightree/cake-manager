@@ -1,15 +1,16 @@
 ﻿@inherits ToastComponent
 
-<div style="position: absolute; bottom: 10px; left: 10px;">
-  <div class="toast" aria-live="assertive" role="alert" aria-atomic="true" data-delay="2000" data-autohide="true" style="min-width: 300px;">
-    <div class="toast-header">
-      <strong class="mr-auto">@ToastService.Title</strong>
-      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+@if (ToastMessage != null)
+{
+    <div id="Toast_@ToastMessage.Id" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" data-autohide="true" style="min-width: 300px;">
+        <div class="toast-header">
+            <strong class="mr-auto">@ToastMessage.Title</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            @ToastMessage.Message
+        </div>
     </div>
-    <div class="toast-body">
-        @ToastService.Message
-    </div>
-  </div>
-</div>
+}

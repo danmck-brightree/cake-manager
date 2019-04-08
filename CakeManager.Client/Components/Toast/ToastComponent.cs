@@ -1,17 +1,15 @@
 ﻿using System.Threading.Tasks;
-using CakeManager.Client.Services.Interfaces;
+using CakeManager.Client.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace CakeManager.Client.Components.Toast
 {
     public class ToastComponent : ComponentBase
     {
-        [Inject] protected IToastService ToastService { get; set; }
+        [Parameter] protected ToastMessage ToastMessage { get; set; }
 
         protected override async Task OnInitAsync()
         {
-            ToastService.onShowToast += () => StateHasChanged();
-
             await base.OnInitAsync();
         }
     }

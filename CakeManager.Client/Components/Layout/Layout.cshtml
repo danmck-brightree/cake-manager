@@ -9,10 +9,11 @@
     </div>
 
     <div class="@NavMenuCssClass" onclick="@ToggleNavMenu">
+
         <ul class="nav flex-column">
-            @if (TokenService.IsLoggedIn)
+            @if (TokenService.IsLoggedIn.HasValue && TokenService.IsLoggedIn.Value)
             {
-                @if (TokenService.IsRegistered)
+                @if (TokenService.IsRegistered.HasValue && TokenService.IsRegistered.Value)
                 {
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -27,7 +28,7 @@
                     </NavLink>
                 </li>
 
-                @if (TokenService.IsRegistered)
+                @if (TokenService.IsRegistered.HasValue && TokenService.IsRegistered.Value)
                 {
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="cakemark" Match="NavLinkMatch.All">
@@ -38,20 +39,29 @@
 
             }
         </ul>
+
+        @if (TokenService.IsLoggedIn.HasValue && TokenService.IsLoggedIn.Value && !TokenService.IsRegistered.HasValue)
+        {
+            <div style="width: 250px; text-align: center; margin-top: 10px;">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        }
+
     </div>
 </div>
 
 <div class="main">
     <div class="top-row px-4">
-        @if (TokenService.IsLoggedIn)
+        @if (TokenService.IsLoggedIn.HasValue && TokenService.IsLoggedIn.Value)
         {
             <a href="" onclick="@LogOut" class="ml-md-auto nav-link">Log Out</a>
         }
     </div>
 
-    <div class="content px-4">
+    <div class="content px-4" style="position: relative;">
         @Body
+        <Toasts/>
     </div>
 </div>
-
-<Toast/>

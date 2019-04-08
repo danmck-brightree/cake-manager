@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CakeManager.Client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using static CakeManager.Shared.Constants;
@@ -57,10 +58,26 @@ namespace CakeManager.Client.Components.CakeMarkTally
             }
         }
 
+        private Action isLoggedInAction;
+
         protected override async Task OnInitAsync()
         {
-            if (!TokenService.IsLoggedIn)
+            if (!TokenService.IsLoggedIn.HasValue || !TokenService.IsLoggedIn.Value)
+            {
+                this.isLoggedInAction = async () => { await GetData(); };
+                TokenService.onStatusChanged += isLoggedInAction;
                 return;
+            }
+
+            await GetData();
+
+            await base.OnInitAsync();
+        }
+
+        private async Task GetData()
+        {
+            if (this.isLoggedInAction != null)
+                TokenService.onStatusChanged -= isLoggedInAction;
 
             switch (this.CakeMarkType)
             {
@@ -71,7 +88,6 @@ namespace CakeManager.Client.Components.CakeMarkTally
                     this.CakeMarkTally = await this.CakeMarkService.GetSuperCakeMarkTally();
                     break;
             }
-            await base.OnInitAsync();
         }
     }
 }

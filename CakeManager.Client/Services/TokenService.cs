@@ -11,9 +11,9 @@ namespace CakeManager.Client.Services
     {
         private const string HasLocalUserUrl = "/api/Account/User";
 
-        public bool IsLoggedIn { get; set; }
+        public bool? IsLoggedIn { get; set; }
 
-        public bool IsRegistered { get; set; }
+        public bool? IsRegistered { get; set; }
 
         private IJSRuntime JsRuntimeCurrent { get; set; }
 
@@ -29,14 +29,15 @@ namespace CakeManager.Client.Services
 
         public async Task LogIn()
         {
-            this.IsRegistered = false;
+            this.IsRegistered = null;
             onStatusChanged?.Invoke();
             await JsRuntimeCurrent.LogIn();
         }
 
         public async Task LogOut()
         {
-            this.IsRegistered = false;
+            this.IsRegistered = null;
+            this.IsLoggedIn = false;
             onStatusChanged?.Invoke();
             await JsRuntimeCurrent.LogOut();
         }
@@ -58,7 +59,7 @@ namespace CakeManager.Client.Services
 
         public async Task<bool> HasLocalUser()
         {
-            if (this.IsRegistered)
+            if (this.IsRegistered.HasValue && this.IsRegistered.Value)
                 return true;
 
             var hasLocalUser = await HttpClient.GetJsonAsync<bool>(HasLocalUserUrl);

@@ -29,6 +29,7 @@ namespace CakeManager.Client.Components.CakeMark
         private const string RemoveCakeMarkFailedMessage = "Remove cake mark failed.";
         private const string AddCakeMarkSuccessMessage = "Add cake mark success.";
         private const string RemoveCakeMarkSuccessMessage = "Remove cake mark success.";
+        private const string RemoveSuperCakeMarkSuccessMessage = "Remove super cake mark success.";
 
         protected override async Task OnAfterRenderAsync()
         {
@@ -110,7 +111,10 @@ namespace CakeManager.Client.Components.CakeMark
             if (!result)
                 Error.ErrorMessage = RemoveCakeMarkFailedMessage;
             else
+            {
                 SuperCakeMarkTally.CakeMarkTally--;
+                await ToastService.ShowToast(RemoveSuperCakeMarkSuccessMessage);
+            }
 
             await CakeMarkBoard.Refresh();
         }

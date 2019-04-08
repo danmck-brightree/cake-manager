@@ -10,6 +10,7 @@ namespace CakeManager.Client.Services
     {
         private readonly IJSRuntime jSRuntime;
 
+        public Guid Id { get; private set; }
         public string Title { get; private set; }
         public string Message { get; private set; }
 
@@ -22,12 +23,12 @@ namespace CakeManager.Client.Services
 
         public async Task ShowToast(string message, string title = "Success")
         {
+            this.Id = Guid.NewGuid();
             this.Title = title;
             this.Message = message;
 
-            await this.jSRuntime.ShowToast();
-
             onShowToast?.Invoke();
+            await this.jSRuntime.ShowToast(this.Id);
         }
     }
 }

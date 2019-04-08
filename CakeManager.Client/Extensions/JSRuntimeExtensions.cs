@@ -82,11 +82,11 @@ namespace CakeManager.Client.Extensions
 
         #region bootstrap toast
 
-        public static async Task ShowToast(this IJSRuntime jsRuntime)
+        public static async Task ShowToast(this IJSRuntime jsRuntime, Guid id)
         {
             try
             {
-                await jsRuntime.InvokeAsync<bool>("showToast");
+                await jsRuntime.InvokeAsync<bool>("showToast", new { id });
             }
             catch (Exception e)
             {
