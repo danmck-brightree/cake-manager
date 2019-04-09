@@ -81,7 +81,8 @@ namespace CakeManager.Logic
                     {
                         UserId = this.CurrentUserId.Value,
                         CreatedBy = this.CurrentUserId.Value,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow
                     };
 
                     await this.cakeMarkDbContext.SuperCakeMark.AddAsync(dbSuperCakeMark);
@@ -106,6 +107,7 @@ namespace CakeManager.Logic
                     UserId = this.CurrentUserId.Value,
                     CreatedDate = DateTime.UtcNow,
                     CreatedBy = this.CurrentUserId.Value,
+                    ModifiedDate = DateTime.UtcNow
                 };
 
                 await this.cakeMarkDbContext.CakeMark.AddAsync(dbCakeMark);
@@ -150,6 +152,7 @@ namespace CakeManager.Logic
                     };
 
                 dbCakeMark.IsDeleted = true;
+                dbCakeMark.ModifiedDate = DateTime.UtcNow;
 
                 return new CakeMarkResult
                 {
@@ -190,6 +193,7 @@ namespace CakeManager.Logic
                     };
 
                 dbCakeMark.IsDeleted = true;
+                dbCakeMark.ModifiedDate = DateTime.UtcNow;
 
                 return new CakeMarkResult
                 {
@@ -232,8 +236,8 @@ namespace CakeManager.Logic
                         SuperCakeMarks = x.SuperCakeMarks.Where(y => !y.IsDeleted).Count(),
                         LatestEventDate = new[]
                         {
-                            x.CakeMarks.Select(y => y.CreatedDate).DefaultIfEmpty(DateTime.MinValue).Max(),
-                            x.SuperCakeMarks.Select(y => y.CreatedDate).DefaultIfEmpty(DateTime.MinValue).Max()
+                            x.CakeMarks.Select(y => y.ModifiedDate).DefaultIfEmpty(DateTime.MinValue).Max(),
+                            x.SuperCakeMarks.Select(y => y.ModifiedDate).DefaultIfEmpty(DateTime.MinValue).Max()
                         }
                         .Max()
                     })

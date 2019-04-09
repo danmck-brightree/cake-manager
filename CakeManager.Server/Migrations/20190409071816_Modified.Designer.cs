@@ -4,14 +4,16 @@ using CakeManager.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CakeManager.Server.Migrations
 {
     [DbContext(typeof(CakeMarkDbContext))]
-    partial class CakeMarkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190409071816_Modified")]
+    partial class Modified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
