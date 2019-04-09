@@ -18,6 +18,8 @@ namespace CakeManager.Client.Services
 
         private const string OfficeUrl = "/api/Office/Offices";
         private const string CurrentUserOfficeUrl = "/api/Office/User";
+        private const string DeleteOfficeUrl = "/api/Office/DeleteOffice";
+        private const string EditOfficeUrl = "/api/Office/EditOffice";
 
         public async Task<List<Office>> GetOffices()
         {
@@ -32,6 +34,16 @@ namespace CakeManager.Client.Services
         public async Task<bool> SaveCurrentUserOfficeId(Guid selectedOfficeId)
         {
             return await HttpClient.PostJsonAsync<bool>(CurrentUserOfficeUrl, selectedOfficeId);
+        }
+
+        public async Task<bool> EditOffice(Office office)
+        {
+            return await HttpClient.PostJsonAsync<bool>(EditOfficeUrl, office);
+        }
+
+        public async Task<bool> DeleteOffice(Guid officeId)
+        {
+            return await HttpClient.PostJsonAsync<bool>(DeleteOfficeUrl, officeId);
         }
     }
 }

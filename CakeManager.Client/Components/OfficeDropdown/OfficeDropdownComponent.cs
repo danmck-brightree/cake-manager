@@ -25,16 +25,20 @@ namespace CakeManager.Client.Components.OfficeDropdown
 
             this.SelectedOfficeId = this.Offices
                 .Where(x => x.Selected)
-                .Select(x => x.Id)
+                .Select(x => x.Id.Value)
                 .FirstOrDefault();
 
-            if (SelectedOfficeId != default)
+            if (SelectedOfficeId == default)
             {
-                this.ChangeOffice(new UIChangeEventArgs
-                {
-                    Value = SelectedOfficeId
-                });
+                this.SelectedOfficeId = this.Offices
+                    .Select(x => x.Id.Value)
+                    .FirstOrDefault();
             }
+
+            this.ChangeOffice(new UIChangeEventArgs
+            {
+                Value = SelectedOfficeId
+            });
 
             await base.OnInitAsync();
         }

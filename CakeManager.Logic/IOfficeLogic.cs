@@ -10,5 +10,7 @@ namespace CakeManager.Logic
         Task<List<Office>> GetOffices();
         Task<Guid> GetCurrentUserOfficeId();
         Task<bool> SaveCurrentUserOfficeId(Guid selectedOfficeId);
+        Task<bool> DeleteOffice(Guid officeId);
+        Task<bool> EditOffice(Office office);
     }
 }

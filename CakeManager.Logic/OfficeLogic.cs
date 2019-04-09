@@ -93,5 +93,58 @@ namespace CakeManager.Logic
                 return false;
             }
         }
+
+        public async Task<bool> DeleteOffice(Guid officeId)
+        {
+            try
+            {
+                var office = await this.cakeMarkDbContext.Office
+                    .FirstOrDefaultAsync(x => x.Id == officeId);
+
+                if (office == null)
+                    return false;
+
+                if (office.Users != null && office.Users.Any())
+                    return false;
+
+                this.cakeMarkDbContext.Office.Remove(office);
+
+                return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> EditOffice(Office office)
+        {
+            try
+            {
+                Repository.Models.Office dbOffice;
+
+                if (office.Id.HasValue)
+                {
+                    dbOffice = await this.cakeMarkDbContext.Office
+                        .FirstOrDefaultAsync(x => x.Id == office.Id.Value);
+
+                    dbOffice.Name = office.Name;
+
+                    return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+                }
+                else
+                {
+                    dbOffice = AutoMapper.Mapper.Map<Repository.Models.Office>(office);
+
+                    this.cakeMarkDbContext.Office.Add(dbOffice);
+
+                    return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

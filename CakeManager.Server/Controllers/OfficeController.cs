@@ -1,5 +1,7 @@
 ﻿using CakeManager.Logic;
+using CakeManager.Server.Authorization;
 using CakeManager.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,20 @@ namespace CakeManager.Server.Controllers
         public async Task<bool> SaveCurrentUserOfficeId([FromBody]Guid selectedOfficeId)
         {
             return await this.officeLogic.SaveCurrentUserOfficeId(selectedOfficeId);
+        }
+
+        [HttpPost("deleteoffice")]
+        [Authorize(Policy = Policies.IsAdmin)]
+        public async Task<bool> DeleteOffice([FromBody]Guid officeId)
+        {
+            return await this.officeLogic.DeleteOffice(officeId);
+        }
+
+        [HttpPost("editoffice")]
+        [Authorize(Policy = Policies.IsAdmin)]
+        public async Task<bool> EditOffice([FromBody]Office office)
+        {
+            return await this.officeLogic.EditOffice(office);
         }
     }
 }
