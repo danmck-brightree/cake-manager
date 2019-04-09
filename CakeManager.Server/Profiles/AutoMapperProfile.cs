@@ -9,6 +9,9 @@ namespace CakeManager.Server
         {
             CreateMap<Office, Repository.Models.Office>();
             CreateMap<Repository.Models.Office, Office>();
+
+            CreateMap<ActiveDirectoryUser, Repository.Models.ActiveDirectoryUser>();
+            CreateMap<Repository.Models.ActiveDirectoryUser, ActiveDirectoryUser>();
         }
     }
 }

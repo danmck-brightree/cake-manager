@@ -11,7 +11,7 @@ namespace CakeManager.Shared
 
     public class CakeMarkGridDataItem
     {
-        public string Name { get; set; }
+        public string Email { get; set; }
         public int CakeMarks { get; set; }
         public int SuperCakeMarks { get; set; }
         public DateTime LatestEventDate { get; set; }

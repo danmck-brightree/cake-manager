@@ -14,7 +14,9 @@ namespace CakeManager.Repository.Models
         [Required]
         public string Email { get; set; }
 
-        public Guid? OfficeId { get; set; }
+        public Guid OfficeId { get; set; }
+
+        public bool IsAdmin { get; set; }
 
         public virtual Office Office { get; set; }
 

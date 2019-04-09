@@ -1,6 +1,8 @@
 using AutoMapper;
 using CakeManager.Logic;
 using CakeManager.Repository;
+using CakeManager.Server.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,9 +42,13 @@ namespace CakeManager.Server
 
             services.AddAuthorization(o =>
             {
-                o.AddPolicy("default", policy =>
+                o.AddPolicy(Policies.Default, policy =>
                 {
                     policy.RequireAuthenticatedUser();
+                });
+                o.AddPolicy(Policies.IsAdmin, policy =>
+                {
+                    policy.Requirements.Add(new IsAdminRequirement());
                 });
             });
 
@@ -73,6 +79,7 @@ namespace CakeManager.Server
             services.AddScoped<ICakeMarkLogic, CakeMarkLogic>();
             services.AddScoped<IOfficeLogic, OfficeLogic>();
             services.AddScoped<IAccountLogic, AccountLogic>();
+            services.AddScoped<IAuthorizationHandler, IsAdminHandler>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 

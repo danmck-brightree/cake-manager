@@ -1,8 +1,10 @@
-﻿using CakeManager.Repository;
-using CakeManager.Repository.Models;
+﻿using AutoMapper.QueryableExtensions;
+using CakeManager.Repository;
+using CakeManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CakeManager.Logic
@@ -21,8 +23,11 @@ namespace CakeManager.Logic
         {
             try
             {
+                if (!CurrentUserId.HasValue)
+                    return false;
+
                 var user = await this.cakeMarkDbContext.ActiveDirectoryUser
-                    .SingleAsync(x => x.Id == CurrentUserId.Value);
+                    .FirstOrDefaultAsync(x => x.Id == CurrentUserId.Value);
 
                 return user != null;
             }
@@ -32,7 +37,7 @@ namespace CakeManager.Logic
             }
         }
 
-        public async Task<bool> RegisterLocalUser()
+        public async Task<bool> RegisterLocalUser(Guid selectedOfficeId)
         {
             try
             {
@@ -43,9 +48,10 @@ namespace CakeManager.Logic
 
                 if (currentUser == null)
                 {
-                    currentUser = new ActiveDirectoryUser
+                    currentUser = new Repository.Models.ActiveDirectoryUser
                     {
-                        Email = currentUserEmail
+                        Email = currentUserEmail,
+                        OfficeId = selectedOfficeId
                     };
                     this.cakeMarkDbContext.ActiveDirectoryUser.Add(currentUser);
                     this.cakeMarkDbContext.SaveChanges();
@@ -54,6 +60,70 @@ namespace CakeManager.Logic
                 }
 
                 return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<ActiveDirectoryUser>> GetUsers()
+        {
+            try
+            {
+                var users = await this.cakeMarkDbContext.ActiveDirectoryUser
+                    .ProjectTo<ActiveDirectoryUser>()
+                    .ToListAsync();
+
+                var offices = await this.cakeMarkDbContext.Office
+                    .ToDictionaryAsync(x => x.Id, x => x.Name);
+
+                users.ForEach(x =>
+                {
+                    x.Office = offices[x.OfficeId];
+                });
+
+                return users;
+            }
+            catch
+            {
+                return new List<ActiveDirectoryUser>();
+            }
+        }
+
+        public async Task<bool> DeleteUser(string email)
+        {
+            try
+            {
+                var user = await this.cakeMarkDbContext.ActiveDirectoryUser
+                    .FirstOrDefaultAsync(x => x.Email == email);
+
+                if (user == null)
+                    return false;
+
+                this.cakeMarkDbContext.ActiveDirectoryUser.Remove(user);
+
+                return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ToggleUserAdmin(string email)
+        {
+            try
+            {
+                var user = await this.cakeMarkDbContext.ActiveDirectoryUser
+                       .FirstOrDefaultAsync(x => x.Email == email);
+
+                if (user == null)
+                    return false;
+
+                user.IsAdmin = !user.IsAdmin;
+
+                return (await this.cakeMarkDbContext.SaveChangesAsync()) > 0;
             }
             catch
             {

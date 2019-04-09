@@ -13,6 +13,7 @@ namespace CakeManager.Client
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<ICakeMarkService, CakeMarkService>();
             services.AddSingleton<IOfficeService, OfficeService>();
+            services.AddSingleton<IUserService, UserService>();
 
             services.AddScoped<ITokenHttpClient, TokenHttpClient>();
             services.AddScoped<IToastService, ToastService>();

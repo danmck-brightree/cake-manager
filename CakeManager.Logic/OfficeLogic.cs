@@ -47,6 +47,9 @@ namespace CakeManager.Logic
         {
             try
             {
+                if (!CurrentUserId.HasValue)
+                    return default;
+
                 var selectedOfficeId = await this.cakeMarkDbContext.Office
                     .Where(x => x.Users.Any(y => y.Id == CurrentUserId.Value))
                     .Select(x => x.Id)
@@ -65,20 +68,23 @@ namespace CakeManager.Logic
             if (selectedOfficeId == default)
                 return false;
 
-            if (!this.CurrentUserId.HasValue)
-            {
-                if (!await this.accountLogic.RegisterLocalUser())
-                    return false;
-            }
-
             try
             {
-                var user = await this.cakeMarkDbContext.ActiveDirectoryUser
-                    .SingleAsync(x => x.Id == CurrentUserId.Value);
 
-                user.OfficeId = selectedOfficeId;
+                if (!this.CurrentUserId.HasValue)
+                {
+                    if (!await this.accountLogic.RegisterLocalUser(selectedOfficeId))
+                        return false;
+                }
+                else
+                {
+                    var user = await this.cakeMarkDbContext.ActiveDirectoryUser
+                        .SingleAsync(x => x.Id == CurrentUserId.Value);
 
-                await this.cakeMarkDbContext.SaveChangesAsync();
+                    user.OfficeId = selectedOfficeId;
+
+                    await this.cakeMarkDbContext.SaveChangesAsync();
+                }
 
                 return true;
             }

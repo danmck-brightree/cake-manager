@@ -231,7 +231,7 @@ namespace CakeManager.Logic
                     .Where(x => x.OfficeId == officeId)
                     .Select(x => new CakeMarkGridDataItem
                     {
-                        Name = x.Email,
+                        Email = x.Email,
                         CakeMarks = x.CakeMarks.Where(y => !y.IsDeleted).Count(),
                         SuperCakeMarks = x.SuperCakeMarks.Where(y => !y.IsDeleted).Count(),
                         LatestEventDate = new[]

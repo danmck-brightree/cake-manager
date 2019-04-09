@@ -4,14 +4,16 @@ using CakeManager.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CakeManager.Server.Migrations
 {
     [DbContext(typeof(CakeMarkDbContext))]
-    partial class CakeMarkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190409072738_Admin")]
+    partial class Admin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace CakeManager.Server.Migrations
 
                     b.Property<bool>("IsAdmin");
 
-                    b.Property<Guid>("OfficeId");
+                    b.Property<Guid?>("OfficeId");
 
                     b.HasKey("Id");
 
@@ -75,12 +77,12 @@ namespace CakeManager.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5ffca255-621e-4a08-ab74-1b67335c9419"),
+                            Id = new Guid("6967ccfe-e252-40af-b069-9529b38ecea8"),
                             Name = "Aberdeen"
                         },
                         new
                         {
-                            Id = new Guid("7cb1c233-fb4d-4d77-9711-730bfe9415bb"),
+                            Id = new Guid("63888896-7b57-4aba-a465-b885ae90c6be"),
                             Name = "Glasgow"
                         });
                 });
@@ -111,8 +113,7 @@ namespace CakeManager.Server.Migrations
                 {
                     b.HasOne("CakeManager.Repository.Models.Office", "Office")
                         .WithMany("Users")
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OfficeId");
                 });
 
             modelBuilder.Entity("CakeManager.Repository.Models.CakeMark", b =>

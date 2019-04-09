@@ -13,9 +13,6 @@ namespace CakeManager.Client.Pages.Login
         [Inject] protected IUriHelper UriHelper { get; set; }
         [Inject] protected ITokenService TokenService { get; set; }
 
-        protected ErrorComponent Error { get; set; }
-        protected User User { get; set; } = new User();
-
         protected override async Task OnInitAsync()
         {
             var token = await TokenService.GetToken();

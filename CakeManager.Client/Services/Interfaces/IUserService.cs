@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CakeManager.Logic
+namespace CakeManager.Client.Services.Interfaces
 {
-    public interface IAccountLogic
+    public interface IUserService
     {
-        Task<bool> HasLocalUser();
-        Task<bool> RegisterLocalUser(Guid selectedOfficeId);
+        bool? IsAdmin { get; set; }
+        event Action onStatusChanged;
+        Task<bool> IsCurrentUserAdmin();
         Task<List<ActiveDirectoryUser>> GetUsers();
         Task<bool> DeleteUser(string email);
         Task<bool> ToggleUserAdmin(string email);

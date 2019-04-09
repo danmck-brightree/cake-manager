@@ -1,0 +1,35 @@
+﻿@page "/admin"
+@inherits AdminComponent
+@layout Layout.Layout
+
+<h3>Users</h3>
+
+<Error ref="Error"/>
+
+<div class="table-responsive">
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Office</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        @foreach (var user in Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.IsAdmin</td>
+                <td>@user.Office</td>
+                <td>
+                    <button type="button" onclick="@(() => ClickAdmin(user.Email))" class="btn btn-outline-warning btn-sm">Admin</button>
+                    <button type="button" onclick="@(() => ClickDelete(user.Email))" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

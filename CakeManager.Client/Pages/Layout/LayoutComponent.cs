@@ -8,6 +8,7 @@ namespace CakeManager.Client.Pages.Layout
     public class LayoutComponent : LayoutComponentBase
     {
         [Inject] protected ITokenService TokenService { get; set; }
+        [Inject] protected IUserService UserService { get; set; }
 
         protected bool CollapseNavMenu { get; set; } = true;
 
@@ -16,7 +17,12 @@ namespace CakeManager.Client.Pages.Layout
         protected override async Task OnInitAsync()
         {
             TokenService.onStatusChanged += StateHasChanged;
-            var token = await TokenService.GetToken();
+
+            await TokenService.GetToken();
+
+            UserService.onStatusChanged += StateHasChanged;
+
+            await UserService.IsCurrentUserAdmin();
 
             await base.OnInitAsync();
         }

@@ -59,9 +59,6 @@ namespace CakeManager.Client.Services
 
         public async Task<bool> HasLocalUser()
         {
-            if (this.IsRegistered.HasValue && this.IsRegistered.Value)
-                return true;
-
             var hasLocalUser = await HttpClient.GetJsonAsync<bool>(HasLocalUserUrl);
 
             this.IsRegistered = hasLocalUser;

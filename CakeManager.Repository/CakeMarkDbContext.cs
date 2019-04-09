@@ -12,10 +12,10 @@ namespace CakeManager.Repository
         {
         }
 
-        public DbSet<Models.CakeMark> CakeMark { get; set; }
+        public DbSet<CakeMark> CakeMark { get; set; }
         public DbSet<Models.Office> Office { get; set; }
-        public DbSet<Models.SuperCakeMark> SuperCakeMark { get; set; }
-        public DbSet<ActiveDirectoryUser> ActiveDirectoryUser { get; set; }
+        public DbSet<SuperCakeMark> SuperCakeMark { get; set; }
+        public DbSet<Models.ActiveDirectoryUser> ActiveDirectoryUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
