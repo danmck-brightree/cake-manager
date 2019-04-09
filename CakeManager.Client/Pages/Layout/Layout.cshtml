@@ -51,9 +51,7 @@
         @if (TokenService.IsLoggedIn.HasValue && TokenService.IsLoggedIn.Value && !TokenService.IsRegistered.HasValue)
         {
             <div style="width: 250px; text-align: center; margin-top: 10px;">
-                <div class="spinner-border text-light" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
+                <div class="spinner-border text-light" role="status" />
             </div>
         }
 

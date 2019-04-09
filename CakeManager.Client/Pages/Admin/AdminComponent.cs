@@ -22,6 +22,9 @@ namespace CakeManager.Client.Pages.Admin
         protected ModalComponent EditOfficeModal { get; set; }
         protected ModalComponent DeleteOfficeModal { get; set; }
 
+        protected bool UserGridLoading { get; set; }
+        protected bool OfficeGridLoading { get; set; }
+
         protected Shared.Office SelectedOffice { get; set; }
 
         protected List<ActiveDirectoryUser> Users { get; set; } = new List<ActiveDirectoryUser>();
@@ -37,8 +40,13 @@ namespace CakeManager.Client.Pages.Admin
             if (!(await CheckIsAdmin()))
                 return;
 
-            Users = await UserService.GetUsers();
-            Offices = await OfficeService.GetOffices();
+            var tasks = new Task[]
+            {
+                this.GetUserGridData(),
+                this.GetOfficeGridData()
+            };
+
+            await Task.WhenAll(tasks);
 
             await base.OnInitAsync();
         }
@@ -69,7 +77,7 @@ namespace CakeManager.Client.Pages.Admin
                 if (!(await CheckIsAdmin()))
                     return;
 
-                Users = await UserService.GetUsers();
+                await GetUserGridData();
             }
         }
 
@@ -90,7 +98,7 @@ namespace CakeManager.Client.Pages.Admin
                     return;
                 }
 
-                Users = await UserService.GetUsers();
+                await GetUserGridData();
             }
         }
 
@@ -132,7 +140,7 @@ namespace CakeManager.Client.Pages.Admin
             if (!(await OfficeService.EditOffice(this.SelectedOffice)))
                 this.Error.ErrorMessage = SaveOfficeErrorMessage;
             else
-                Offices = await OfficeService.GetOffices();
+                await GetOfficeGridData();
 
             StateHasChanged();
 
@@ -146,10 +154,28 @@ namespace CakeManager.Client.Pages.Admin
             if (!(await OfficeService.DeleteOffice(this.SelectedOffice.Id.Value)))
                 this.Error.ErrorMessage = DeleteOfficeErrorMessage;
             else
-                Offices = await OfficeService.GetOffices();
+                await GetOfficeGridData();
 
             await JSRuntime.HideModal("deleteOfficeModal");
 
+            StateHasChanged();
+        }
+
+        private async Task GetUserGridData()
+        {
+            UserGridLoading = true;
+            StateHasChanged();
+            Users = await UserService.GetUsers();
+            UserGridLoading = false;
+            StateHasChanged();
+        }
+
+        private async Task GetOfficeGridData()
+        {
+            OfficeGridLoading = true;
+            StateHasChanged();
+            Offices = await OfficeService.GetOffices();
+            OfficeGridLoading = false;
             StateHasChanged();
         }
     }

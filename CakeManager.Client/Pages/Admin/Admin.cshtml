@@ -18,6 +18,15 @@
             </tr>
         </thead>
 
+        @if (UserGridLoading)
+        {
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <div class="spinner-border text-secondary" role="status" />
+                </td>
+            </tr>
+        }
+
         @foreach (var user in Users)
         {
             <tr>
@@ -49,6 +58,15 @@
                 <th></th>
             </tr>
         </thead>
+
+        @if (OfficeGridLoading)
+        {
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <div class="spinner-border text-secondary" role="status" />
+                </td>
+            </tr>
+        }
 
         @foreach (var office in Offices)
         {
