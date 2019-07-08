@@ -13,6 +13,15 @@
             </tr>
         </thead>
 
+        @if (GridLoading)
+        {
+            <tr>
+                <td colspan="3" style="text-align: center;">
+                    <div class="spinner-border text-secondary" role="status" />
+                </td>
+            </tr>
+        }
+
         @foreach (var cakeMarkGridData in CakeMarkGridData.Items)
         {
             <tr>

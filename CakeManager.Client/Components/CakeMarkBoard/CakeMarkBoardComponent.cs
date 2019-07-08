@@ -18,6 +18,8 @@ namespace CakeManager.Client.Components.CakeMarkBoard
 
         public CakeMarkGridData CakeMarkGridData { get; private set; } = new CakeMarkGridData();
 
+        public bool GridLoading { get; set; }
+
         protected override async Task OnAfterRenderAsync()
         {
             Action<Guid> onSelectedOfficeChanged = async (Guid selectedOfficeId) => await ChangeOffice(selectedOfficeId);
@@ -30,14 +32,22 @@ namespace CakeManager.Client.Components.CakeMarkBoard
 
         protected async Task ChangeOffice(Guid selectedOfficeId)
         {
+            this.GridLoading = true;
+            StateHasChanged();
+
             this.CakeMarkGridData = await CakeMarkService.GetCakeMarkGridData(selectedOfficeId);
+            this.GridLoading = false;
 
             StateHasChanged();
         }
 
         public async Task Refresh()
         {
+            this.GridLoading = true;
+            StateHasChanged();
+
             await this.ChangeOffice(this.OfficeDropdown.SelectedOfficeId);
+            this.GridLoading = false;
 
             StateHasChanged();
         }

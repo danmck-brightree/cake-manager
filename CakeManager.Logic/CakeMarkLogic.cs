@@ -246,7 +246,10 @@ namespace CakeManager.Logic
                 var data = new CakeMarkGridData
                 {
                     Items = cakeMarkGridDataItems,
-                    LatestEventDate = cakeMarkGridDataItems.Max(x => x.LatestEventDate)
+                    LatestEventDate = cakeMarkGridDataItems
+                        .Select(x => x.LatestEventDate)
+                        .DefaultIfEmpty(DateTime.MinValue)
+                        .Max(x => x)
                 };
 
                 return data;
