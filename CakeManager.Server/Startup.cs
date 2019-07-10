@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 
@@ -71,7 +72,9 @@ namespace CakeManager.Server
                 });
 
             services.AddResponseCompression();
-            services.AddDbContext<CakeMarkDbContext>(options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("CakeManager.Server")));
+            services.AddDbContext<CakeMarkDbContext>(options => options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(connectionString, b => b.MigrationsAssembly("CakeManager.Server")));
 
             Mapper.Initialize(x => x.AddProfile<AutoMapperProfile>());
 
@@ -87,20 +90,24 @@ namespace CakeManager.Server
         {
             app.UseResponseCompression();
 
-            if (env.EnvironmentName == "Development")
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBlazorDebugging();
             }
 
+            app.UseAuthorization();
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
-            });
+            app.UseClientSideBlazorFiles<Client.Startup>();
 
-            app.UseBlazor<Client.Startup>();
-            app.UseBlazorDebugging();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
+            });
         }
     }
 }

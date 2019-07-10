@@ -3,8 +3,6 @@ using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CakeManager.Client.Components.CakeMarkBoard

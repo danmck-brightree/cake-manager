@@ -2,7 +2,6 @@
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Services;
 
 namespace CakeManager.Client.Components.TokenGuard
 {

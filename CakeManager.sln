@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeManager.Client", "CakeM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeManager.Shared", "CakeManager.Shared\CakeManager.Shared.csproj", "{637F87A9-3215-46C6-87E9-171F9581A2DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeManager.Logic", "CakeManager.Logic\CakeManager.Logic.csproj", "{D8A2F7A2-75A1-4634-AB79-04FDE6785B95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeManager.Logic", "CakeManager.Logic\CakeManager.Logic.csproj", "{D8A2F7A2-75A1-4634-AB79-04FDE6785B95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeManager.Repository", "CakeManager.Repository\CakeManager.Repository.csproj", "{55A8A5E0-A55F-4447-86DC-C1321BF4DECB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeManager.Repository", "CakeManager.Repository\CakeManager.Repository.csproj", "{55A8A5E0-A55F-4447-86DC-C1321BF4DECB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

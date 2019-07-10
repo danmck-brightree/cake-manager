@@ -1,8 +1,10 @@
 ﻿@page "/admin"
 @inherits AdminComponent
 @layout Layout.Layout
+@using CakeManager.Client.Components.Error
+@using CakeManager.Client.Components.Modal
 
-<Error ref="Error"/>
+<Error @ref="Error"/>
 
 <h3>Users</h3>
 
@@ -34,8 +36,8 @@
                 <td>@user.IsAdmin</td>
                 <td>@user.Office</td>
                 <td>
-                    <button type="button" onclick="@(() => ClickUserAdmin(user.Email))" class="btn btn-outline-warning btn-sm">Admin</button>
-                    <button type="button" onclick="@(() => ClickUserDelete(user.Email))" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</button>
+                    <button type="button" @onclick="@(() => ClickUserAdmin(user.Email))" class="btn btn-outline-warning btn-sm">Admin</button>
+                    <button type="button" @onclick="@(() => ClickUserDelete(user.Email))" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</button>
                 </td>
             </tr>
         }
@@ -46,7 +48,7 @@
 <h3>Offices</h3>
 
 <div style="margin-bottom: 10px">
-    <button type="button" onclick="@ClickOfficeAdd" class="btn btn-primary">Add</button>
+    <button type="button" @onclick="@ClickOfficeAdd" class="btn btn-primary">Add</button>
 </div>
 
 <div class="table-responsive">
@@ -73,8 +75,8 @@
             <tr>
                 <td>@office.Name</td>
                 <td>
-                    <button type="button" onclick="@(() => ClickOfficeEdit(office))" class="btn btn-outline-warning btn-sm">Edit</button>
-                    <button type="button" onclick="@(() => ClickOfficeDelete(office))" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</button>
+                    <button type="button" @onclick="@(() => ClickOfficeEdit(office))" class="btn btn-outline-warning btn-sm">Edit</button>
+                    <button type="button" @onclick="@(() => ClickOfficeDelete(office))" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</button>
                 </td>
             </tr>
         }
@@ -82,7 +84,7 @@
     </table>
 </div>
 
-<Modal ref="EditOfficeModal"
+<Modal @ref="EditOfficeModal"
        Id="editOfficeModal"
        Title="Edit Office"
        ButtonText="Save">
@@ -96,14 +98,14 @@
                     {
                         <input type="hidden" id="id" value="@SelectedOffice.Id"/>
                     }
-                    <input type="text" class="form-control" id="name" placeholder="enter a name" bind="@SelectedOffice.Name"/>
+                    <input type="text" class="form-control" id="name" placeholder="enter a name" @bind="SelectedOffice.Name"/>
                 </div> 
             </form>
         }
     </ModalContent>
 </Modal>
 
-<Modal ref="DeleteOfficeModal"
+<Modal @ref="DeleteOfficeModal"
        Id="deleteOfficeModal"
        Title="Delete"
        ButtonText="Delete">

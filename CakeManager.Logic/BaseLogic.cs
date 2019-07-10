@@ -1,8 +1,8 @@
 ﻿using CakeManager.Repository;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace CakeManager.Logic
 {

@@ -1,7 +1,6 @@
 ﻿using CakeManager.Shared;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Services;
 using CakeManager.Client.Services.Interfaces;
 using CakeManager.Client.Components.Error;
 using System;

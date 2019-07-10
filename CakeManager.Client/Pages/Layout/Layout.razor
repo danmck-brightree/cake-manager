@@ -3,12 +3,12 @@
 <div class="sidebar">
     <div class="top-row pl-4 navbar navbar-dark">
         <a class="navbar-brand" href="">Cake Face</a>
-        <button class="navbar-toggler" onclick="@ToggleNavMenu">
+        <button class="navbar-toggler" @onclick="@ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 
-    <div class="@NavMenuCssClass" onclick="@ToggleNavMenu">
+    <div class="@NavMenuCssClass" @onclick="@ToggleNavMenu">
 
         <ul class="nav flex-column">
             @if (TokenService.IsLoggedIn.HasValue && TokenService.IsLoggedIn.Value)
@@ -62,7 +62,7 @@
     <div class="top-row px-4">
         @if (TokenService.IsLoggedIn.HasValue && TokenService.IsLoggedIn.Value)
         {
-            <a href="" onclick="@LogOut" class="ml-md-auto nav-link">Log Out</a>
+            <a href="" @onclick="@LogOut" class="ml-md-auto nav-link">Log Out</a>
         }
     </div>
 

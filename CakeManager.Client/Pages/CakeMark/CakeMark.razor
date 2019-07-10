@@ -1,0 +1,33 @@
+﻿@page "/cakemark"
+@inherits CakeMarkComponent
+@layout Layout.Layout
+@using static CakeManager.Shared.Constants;
+@using CakeManager.Client.Components.CakeMarkBoard
+@using CakeManager.Client.Components.CakeMarkTally
+@using CakeManager.Client.Components.Error
+@using CakeManager.Client.Components.Modal
+
+<div style="margin-bottom: 10px">
+
+    <Error @ref="Error"/>
+
+    <CakeMarkTally @ref="CakeMarkTally"/>
+
+    <button class="btn btn-danger" @onclick="@AddCakeMark">Add cake mark!</button>
+    <button class="btn btn-success" @onclick="@RemoveCakeMark" disabled="@CanRemoveCakeMark">Remove cake mark!</button>
+
+    <CakeMarkTally @ref="SuperCakeMarkTally" CakeMarkType="@CakeMarkType.Super"/>
+
+    <button class="btn btn-warning" @onclick="@RemoveSuperCakeMark" disabled="@CanRemoveSuperCakeMark">I brought cake!</button>
+
+</div>
+
+<CakeMarkBoard @ref="CakeMarkBoard"/>
+
+<Modal @ref="Modal"
+       Id="addCakeMarkModal"
+       Title="Warning">
+    <ModalContent>
+        You are about to wipe the cake board and commit to buying a cake. Are you sure you want to continue?
+    </ModalContent>
+</Modal>

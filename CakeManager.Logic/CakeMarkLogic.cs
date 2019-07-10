@@ -227,8 +227,11 @@ namespace CakeManager.Logic
         {
             try
             {
-                var cakeMarkGridDataItems = await this.cakeMarkDbContext.ActiveDirectoryUser
+                var officeUsers = await this.cakeMarkDbContext.ActiveDirectoryUser
                     .Where(x => x.OfficeId == officeId)
+                    .ToListAsync();
+
+                var cakeMarkGridDataItems = officeUsers
                     .Select(x => new CakeMarkGridDataItem
                     {
                         Email = x.Email,
@@ -241,7 +244,7 @@ namespace CakeManager.Logic
                         }
                         .Max()
                     })
-                    .ToListAsync();
+                    .ToList();
 
                 var data = new CakeMarkGridData
                 {
